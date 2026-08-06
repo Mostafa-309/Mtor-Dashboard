@@ -552,7 +552,7 @@ function renderDashboard(data) {
       const barColors = supplierRates.map(rate => {
         if (rate >= 90) return '#9FCBAD';
         if (rate >= 80) return '#6EADBC';
-        return '#dc2626';
+        return '#f28b82';
       });
 
       Plotly.react('supplierReliability', [{
