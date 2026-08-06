@@ -584,7 +584,7 @@ function renderDashboard(data) {
         bargap: 0.3
       }, config);
     } else {
-      Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
+      Plotly.react('supplierReliability', [{ type: 'bar', x: [0], y: ['No Data'], orientation: 'h', marker: { color: '#f28b82' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data for this date', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
     }
   } catch (e) { console.error("Error rendering supplierReliability:", e); }
 
