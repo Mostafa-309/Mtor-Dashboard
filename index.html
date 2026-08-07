@@ -263,7 +263,7 @@
         <div id="supplierReliability" style="height: 380px;"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Area Return-Risk Ranking (Top 15)</div>
+        <div class="chart-title">Area Undelivered-Risk Ranking (Top 15)</div>
         <div id="areaRisk" style="height: 380px;"></div>
       </div>
     </div>
@@ -602,7 +602,7 @@ function renderDashboard(data) {
           line: { color: 'white', width: 1 }
         },
         customdata: topAreas.map(d => [d.return_qty, d.total_qty, d.return_rate, d.return_gmv]),
-        hovertemplate: '%{y}<br>Return GMV: $%{x:,.0f}<br>Return Rate: %{customdata[2]:.1f}%<br>Return SKUs: %{customdata[0]} / Total SKUs: %{customdata[1]}<extra></extra>',
+        hovertemplate: '%{y}<br>Undelivered GMV: $%{x:,.0f}<br>Undelivered Rate: %{customdata[2]:.1f}%<br>Undelivered SKUs: %{customdata[0]} / Total SKUs: %{customdata[1]}<extra></extra>',
         text: topAreas.map(d => '$' + (d.return_gmv / 1000).toFixed(1) + 'k'),
         textposition: 'outside',
         textfont: { size: 11, color: '#121358', weight: 'bold' }
@@ -610,7 +610,7 @@ function renderDashboard(data) {
         ...baseLayout, 
         margin: { l: 190, r: 80, t: 15, b: 45 }, 
         xaxis: { 
-          title: 'Return GMV ($)', 
+          title: 'Undelivered GMV ($)', 
           gridcolor: '#90CAF9',
           tickprefix: '$',
           tickformat: ',.0f'
