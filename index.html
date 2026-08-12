@@ -87,6 +87,72 @@
   th { background: linear-gradient(135deg, #2F578A, #121358); color: white; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
   tr:hover { background: #F1F7D4; }
 
+  /* ✅ Styles for Late Reasons Tables */
+  .reasons-table-wrapper {
+    max-height: 550px;
+    overflow-y: auto;
+    padding: 5px;
+  }
+  .reasons-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+  }
+  .reasons-table-wrapper::-webkit-scrollbar-track {
+    background: #F1F7D4;
+    border-radius: 4px;
+  }
+  .reasons-table-wrapper::-webkit-scrollbar-thumb {
+    background: #90CAF9;
+    border-radius: 4px;
+  }
+  .reasons-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter, Arial';
+    font-size: 12px;
+  }
+  .reasons-table th {
+    background: linear-gradient(135deg, #2F578A, #121358);
+    color: white;
+    padding: 10px 12px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .reasons-table th:first-child {
+    text-align: left;
+  }
+  .reasons-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #90CAF9;
+  }
+  .reasons-table tr:nth-child(even) {
+    background: #F1F7D4;
+  }
+  .reasons-table tr:nth-child(odd) {
+    background: white;
+  }
+  .reasons-table tr:hover {
+    background: #E3F2FD;
+  }
+  .reasons-table .total-row {
+    background: linear-gradient(135deg, #E3F2FD, #90CAF9) !important;
+    font-weight: 700;
+    border-top: 2px solid #2F578A;
+  }
+  .reasons-table .total-row:hover {
+    background: linear-gradient(135deg, #E3F2FD, #90CAF9) !important;
+  }
+  .text-scheduled { color: #2F578A; font-weight: 700; }
+  .text-express { color: #36ADA3; font-weight: 700; }
+  .text-total { color: #121358; font-weight: 700; }
+  .text-pct-scheduled { color: #2F578A; }
+  .text-pct-express { color: #36ADA3; }
+  .text-pct-total { color: #121358; }
+
   @media (max-width: 768px) {
     .chart-grid { grid-template-columns: 1fr; }
     .kpi-grid { grid-template-columns: repeat(2, 1fr); }
@@ -119,9 +185,8 @@
       </div>
     </div>
 
-    <!-- KPIs Grid - الترتيب الجديد -->
+    <!-- KPIs Grid -->
     <div class="kpi-grid">
-      <!-- الصف الأول -->
       <div class="kpi-card">
         <div class="kpi-title">Total Orders</div>
         <div class="kpi-value" id="kpiOrders" style="color:#2F578A;">-</div>
@@ -152,8 +217,6 @@
         <div class="kpi-value" id="kpiInventory" style="color:#2196F3;">-</div>
         <div class="kpi-sub">Count</div>
       </div>
-      
-      <!-- الصف الثاني -->
       <div class="kpi-card">
         <div class="kpi-title">Consignment Orders</div>
         <div class="kpi-value" id="kpiConsignment" style="color:#36ADA3;">-</div>
@@ -184,8 +247,6 @@
         <div class="kpi-value" id="kpiAvgTicket" style="color:#2196F3;">-</div>
         <div class="kpi-sub">Per Order</div>
       </div>
-      
-      <!-- الصف الثالث -->
       <div class="kpi-card">
         <div class="kpi-title">Active Couriers</div>
         <div class="kpi-value" id="kpiCouriers" style="color:#36ADA3;">-</div>
@@ -216,8 +277,6 @@
         <div class="kpi-value" id="kpiLogisticsCost" style="color:#ef4444;">-</div>
         <div class="kpi-sub">Logistics</div>
       </div>
-      
-      <!-- الصف الرابع -->
       <div class="kpi-card">
         <div class="kpi-title">AVG Cost Per Order</div>
         <div class="kpi-value" id="kpiAvgCost" style="color:#ef4444;">-</div>
@@ -295,6 +354,35 @@
         </div>
       </div>
     </div>
+
+    <!-- ✅ Late Reasons & Tag Reasons Tables -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Late Orders - Final Reason <span class="badge badge-red">Breakdown</span></div>
+        <div id="lateReasonsContainer" class="reasons-table-wrapper">
+          <p style="text-align: center; color: #2F578A; padding: 20px;">Loading...</p>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Late Orders - Tag Reason <span class="badge badge-blue">Breakdown</span></div>
+        <div id="tagReasonsContainer" class="reasons-table-wrapper">
+          <p style="text-align: center; color: #2F578A; padding: 20px;">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Daily Late Trend Chart & Logistics Cost Chart -->
+<div class="chart-grid">
+  <div class="chart-card">
+    <div class="chart-title">Scheduled Lateness and Express Lateness <span class="badge badge-green">All Time</span></div>
+    <div id="dailyLateChart" style="height: 350px;"></div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-title">Logistics Cost Trend <span class="badge badge-blue">All Time</span></div>
+    <div id="logisticsCostChart" style="height: 350px;"></div>
+  </div>
+</div>
+
   </div>
 
 <script>
@@ -367,7 +455,7 @@ function renderDashboard(data) {
   const kpis = data.kpis;
   const charts = data.charts;
 
-  // 1. KPIs - محدث مع البوكسات الجديدة
+  // 1. KPIs
   try {
     document.getElementById('kpiOrders').textContent = fmt.format(kpis.totalOrders);
     document.getElementById('kpiOrdersSub').textContent = kpis.totalOrders ? `${kpis.successRate}% sold success rate` : 'No data';
@@ -386,7 +474,6 @@ function renderDashboard(data) {
     document.getElementById('kpiNMV').textContent = '$' + money.format(kpis.totalNMV);
     document.getElementById('kpiNmvRate').textContent = kpis.nmvRate + '%';
     
-    // ✅ AVG Ticket Size
     const avgTicketSize = kpis.totalOrders > 0 ? kpis.totalGMV / kpis.totalOrders : 0;
     document.getElementById('kpiAvgTicket').textContent = '$' + money.format(avgTicketSize);
     
@@ -399,13 +486,11 @@ function renderDashboard(data) {
     
     document.getElementById('kpiLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
     
-    // ✅ AVG Cost Per Order
     const avgCostPerOrder = kpis.totalOrders > 0 ? kpis.logisticsCost / kpis.totalOrders : 0;
     document.getElementById('kpiAvgCost').textContent = '$' + money.format(avgCostPerOrder);
     
     document.getElementById('kpiMargin').textContent = '$' + money.format(kpis.totalMargin);
     
-    // ✅ Total Fees & Margin
     const totalFeesMargin = kpis.totalMargin + kpis.totalDeliveryFees + kpis.totalAdditionalFees + kpis.totalServiceFees;
     document.getElementById('kpiTotalFeesMargin').textContent = '$' + money.format(totalFeesMargin);
     
@@ -443,7 +528,7 @@ function renderDashboard(data) {
     }
   } catch (e) { console.error("Error rendering ordersType:", e); }
 
-  // 3. Order Status - تغيير "Returned" إلى "Undelivered"
+  // 3. Order Status
   try {
     const statusData = charts.orderStatus || [];
     const hasData = statusData.some(d => d.value > 0);
@@ -451,7 +536,6 @@ function renderDashboard(data) {
     if (hasData) {
       const totalOrders = statusData.reduce((sum, d) => sum + d.value, 0);
       
-      // تعديل labels: تغيير "Returned" إلى "Undelivered"
       const modifiedLabels = statusData.map(d => {
         if (d.name.toLowerCase() === 'returned') return 'Undelivered';
         return d.name;
@@ -624,6 +708,31 @@ function renderDashboard(data) {
   try {
     if (typeof renderScheduledTable === 'function' && charts.scheduledSlots) renderScheduledTable(charts.scheduledSlots);
     if (typeof renderRushHourTable === 'function' && charts.rushHour) renderRushHourTable(charts.rushHour);
+    
+    // ✅ Late Reasons & Tag Reasons Tables
+    if (typeof renderLateReasonsTable === 'function') {
+      if (charts.lateReasons && charts.lateReasons.length > 0) {
+        renderLateReasonsTable(charts.lateReasons, charts.lateReasonsTotals, 'lateReasonsContainer', 'Final Reason');
+      } else {
+        document.getElementById('lateReasonsContainer').innerHTML = '<p style="text-align: center; color: #64748b; padding: 20px;">No late orders data for this period</p>';
+      }
+      
+      if (charts.tagReasons && charts.tagReasons.length > 0) {
+        renderLateReasonsTable(charts.tagReasons, charts.tagReasonsTotals, 'tagReasonsContainer', 'Tag Reason');
+      } else {
+        document.getElementById('tagReasonsContainer').innerHTML = '<p style="text-align: center; color: #64748b; padding: 20px;">No tag reasons data for this period</p>';
+      }
+    }
+    
+   // ✅ Daily Late Chart (All Time - Not Filtered)
+if (typeof renderDailyLateChart === 'function' && charts.allTimeDailyLate) {
+  renderDailyLateChart(charts.allTimeDailyLate);  // استخدم allTimeDailyLate مش dailyLate
+}
+
+// ✅ Logistics Cost Chart (كل البيانات)
+if (typeof renderLogisticsCostChart === 'function' && charts.logisticsCostTrend) {
+  renderLogisticsCostChart(charts.logisticsCostTrend);
+}
   } catch (e) { console.error("Error rendering tables:", e); }
 }
 
@@ -679,6 +788,241 @@ function renderRushHourTable(rushData) {
   `;
 }
 
+// ✅ Late Reasons & Tag Reasons Table Renderer
+function renderLateReasonsTable(reasons, totals, containerId, reasonType) {
+  const container = document.getElementById(containerId);
+  if (!container || !reasons) return;
+  
+  let html = `<table class="reasons-table">
+    <thead><tr>
+      <th style="width: 35%;">${reasonType}</th>
+      <th style="width: 10%;">Scheduled</th>
+      <th style="width: 10%;">%</th>
+      <th style="width: 10%;">Express</th>
+      <th style="width: 10%;">%</th>
+      <th style="width: 10%;">Total</th>
+      <th style="width: 10%;">%</th>
+    </tr></thead><tbody>`;
+  
+  reasons.forEach((r, idx) => {
+    const schedPct = totals.scheduled > 0 ? ((r.scheduled / totals.scheduled) * 100).toFixed(2) : '0.00';
+    const exprPct = totals.express > 0 ? ((r.express / totals.express) * 100).toFixed(2) : '0.00';
+    const totalPct = totals.total > 0 ? ((r.total / totals.total) * 100).toFixed(2) : '0.00';
+    
+    const reasonText = reasonType === 'Tag Reason' ? r.tag : r.reason;
+    
+    html += `<tr>
+      <td style="font-weight: 600; color: #121358;">${reasonText}</td>
+      <td style="text-align: center;" class="text-scheduled">${r.scheduled}</td>
+      <td style="text-align: center;" class="text-pct-scheduled">${schedPct}%</td>
+      <td style="text-align: center;" class="text-express">${r.express}</td>
+      <td style="text-align: center;" class="text-pct-express">${exprPct}%</td>
+      <td style="text-align: center;" class="text-total">${r.total}</td>
+      <td style="text-align: center;" class="text-pct-total">${totalPct}%</td>
+    </tr>`;
+  });
+  
+  // Total Row
+  html += `<tr class="total-row">
+    <td style="color: #121358;">Total</td>
+    <td style="text-align: center;" class="text-scheduled">${totals.scheduled}</td>
+    <td style="text-align: center;" class="text-pct-scheduled">100.00%</td>
+    <td style="text-align: center;" class="text-express">${totals.express}</td>
+    <td style="text-align: center;" class="text-pct-express">100.00%</td>
+    <td style="text-align: center;" class="text-total">${totals.total}</td>
+    <td style="text-align: center;" class="text-pct-total">100.00%</td>
+  </tr>`;
+  
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
+
+// ✅ Daily Late Trend Chart - Classic Clean Design
+function renderDailyLateChart(dailyData) {
+  if (!dailyData || dailyData.length === 0) {
+    Plotly.react('dailyLateChart', [{ 
+      type: 'scatter', x: [0], y: [0], mode: 'markers', marker: { color: '#e2e8f0' }, hoverinfo: 'none' 
+    }], { 
+      ...baseLayout, 
+      xaxis: { visible: false }, yaxis: { visible: false }, 
+      margin: { t: 20, b: 20, l: 20, r: 20 }, 
+      annotations: [{ text: 'No late orders data available', showarrow: false, font: { size: 14, color: '#64748b' } }] 
+    }, config);
+    return;
+  }
+  
+  const dates = dailyData.map(d => d.date);
+  const scheduledLate = dailyData.map(d => d.scheduled);
+  const expressLate = dailyData.map(d => d.express);
+  
+  Plotly.react('dailyLateChart', [
+    {
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Scheduled Lateness',
+      x: dates,
+      y: scheduledLate,
+      line: { 
+        color: '#2F578A', 
+        width: 3, 
+        shape: 'spline'  // خط ناعم ومنحني
+      },
+      marker: { 
+        size: 8, 
+        color: '#2F578A', 
+        symbol: 'circle', 
+        line: { color: 'white', width: 2 } 
+      },
+      hovertemplate: '<b>%{x}</b><br>Scheduled Late: %{y}<extra></extra>'
+    },
+    {
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Express Lateness',
+      x: dates,
+      y: expressLate,
+      line: { 
+        color: '#ef4444', 
+        width: 3, 
+        shape: 'spline'  // خط ناعم ومنحني
+      },
+      marker: { 
+        size: 8, 
+        color: '#ef4444', 
+        symbol: 'square', 
+        line: { color: 'white', width: 2 } 
+      },
+      hovertemplate: '<b>%{x}</b><br>Express Late: %{y}<extra></extra>'
+    }
+  ], {
+    ...baseLayout,
+    xaxis: { 
+      title: '',  // بدون عنوان (النص في العنوان فوق)
+      gridcolor: '#e6ebf2',
+      tickangle: -45,  // التواريخ مائلة
+      tickformat: '%d/%m',  // تنسيق يوم/شهر
+      showgrid: true,
+      zeroline: false,
+      tickfont: { size: 11, color: '#2F578A', family: 'Inter, Arial' }
+    },
+    yaxis: { 
+      title: 'Late Orders', 
+      titlefont: { size: 13, color: '#2F578A', family: 'Inter, Arial' },
+      gridcolor: '#e6ebf2',
+      zeroline: true,
+      zerolinecolor: '#90CAF9',
+      zerolinewidth: 1,
+      dtick: 2,
+      tickfont: { size: 11, color: '#2F578A' }
+    },
+    legend: { 
+      orientation: 'h', 
+      y: -0.15,
+      x: 0.5,
+      xanchor: 'center',
+      bgcolor: 'rgba(255, 255, 255, 0.8)',  // خلفية شفافة للـ legend
+      bordercolor: '#90CAF9',
+      borderwidth: 1,
+      font: { size: 12, family: 'Inter, Arial', color: '#121358' }
+    },
+    margin: { t: 30, b: 80, l: 60, r: 30 },
+    hovermode: 'x unified',  // عرض البيانات الموحدة عند الـ hover
+    plot_bgcolor: 'rgba(241, 247, 212, 0.1)',  // خلفية فاتحة جداً
+    paper_bgcolor: 'white'
+  }, config);
+}
+
+// ✅ Logistics Cost Trend Chart - Classic Clean Design (بدون أيام الصفر)
+function renderLogisticsCostChart(costData) {
+  if (!costData || costData.length === 0) {
+    Plotly.react('logisticsCostChart', [{ 
+      type: 'scatter', x: [0], y: [0], mode: 'markers', marker: { color: '#e2e8f0' }, hoverinfo: 'none' 
+    }], { 
+      ...baseLayout, 
+      xaxis: { visible: false }, yaxis: { visible: false }, 
+      margin: { t: 20, b: 20, l: 20, r: 20 }, 
+      annotations: [{ text: 'No logistics cost data available', showarrow: false, font: { size: 14, color: '#64748b' } }] 
+    }, config);
+    return;
+  }
+  
+  // ✅ فلتر: استبعد الأيام اللي التكلفة فيها صفر
+  const filteredData = costData.filter(d => d.cost > 0);
+  
+  if (filteredData.length === 0) {
+    Plotly.react('logisticsCostChart', [{ 
+      type: 'scatter', x: [0], y: [0], mode: 'markers', marker: { color: '#e2e8f0' }, hoverinfo: 'none' 
+    }], { 
+      ...baseLayout, 
+      xaxis: { visible: false }, yaxis: { visible: false }, 
+      margin: { t: 20, b: 20, l: 20, r: 20 }, 
+      annotations: [{ text: 'No cost data for working days', showarrow: false, font: { size: 14, color: '#64748b' } }] 
+    }, config);
+    return;
+  }
+  
+  const dates = filteredData.map(d => d.date);
+  const costs = filteredData.map(d => d.cost);
+  
+  Plotly.react('logisticsCostChart', [
+    {
+      type: 'scatter',
+      mode: 'lines+markers',
+      name: 'Logistics Cost',
+      x: dates,
+      y: costs,
+      line: { 
+        color: '#16a34a',
+        width: 3, 
+        shape: 'spline'
+      },
+      marker: { 
+        size: 8, 
+        color: '#16a34a', 
+        symbol: 'diamond',
+        line: { color: 'white', width: 2 } 
+      },
+      hovertemplate: '<b>%{x}</b><br>Cost: $%{y:,.0f}<extra></extra>'
+    }
+  ], {
+    ...baseLayout,
+    xaxis: { 
+      title: '',
+      gridcolor: '#e6ebf2',
+      tickangle: -45,
+      tickformat: '%d/%m',
+      showgrid: true,
+      zeroline: false,
+      tickfont: { size: 11, color: '#2F578A', family: 'Inter, Arial' }
+    },
+    yaxis: { 
+      title: 'Logistics Cost ($)', 
+      titlefont: { size: 13, color: '#2F578A', family: 'Inter, Arial' },
+      gridcolor: '#e6ebf2',
+      zeroline: true,
+      zerolinecolor: '#90CAF9',
+      zerolinewidth: 1,
+      tickprefix: '$',
+      tickformat: ',.0f',
+      tickfont: { size: 11, color: '#2F578A' }
+    },
+    legend: { 
+      orientation: 'h', 
+      y: -0.15,
+      x: 0.5,
+      xanchor: 'center',
+      bgcolor: 'rgba(255, 255, 255, 0.8)',
+      bordercolor: '#90CAF9',
+      borderwidth: 1,
+      font: { size: 12, family: 'Inter, Arial', color: '#121358' }
+    },
+    margin: { t: 30, b: 80, l: 60, r: 30 },
+    hovermode: 'x unified',
+    plot_bgcolor: 'rgba(241, 247, 212, 0.1)',
+    paper_bgcolor: 'white'
+  }, config);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('startDate').value = today;
@@ -718,6 +1062,5 @@ if (resetBtn) {
   };
 }
 </script>
-    <!-- Force rebuild: 2026-08-05 -->
 </body>
 </html>
