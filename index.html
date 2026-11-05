@@ -417,7 +417,6 @@
   .badge.warning { background: rgba(255, 209, 102, 0.15); color: var(--warning); }
   .badge.info { background: rgba(17, 138, 178, 0.15); color: var(--info); }
 
-  /* Loading placeholder for charts */
   .chart-loading {
     display: flex;
     justify-content: center;
@@ -487,7 +486,6 @@
     </div>
 
     <div class="page-content">
-      <!-- PAGE 1: EXECUTIVE SUMMARY -->
       <div id="executive" class="page-section active">
         <div class="kpi-grid">
           <div class="kpi-card info">
@@ -526,7 +524,7 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-chart-pie"></i> Order Status Breakdown <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click to filter)</span></div>
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> Order Status Breakdown</div>
             <div id="execOrderStatus" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
           <div class="chart-card">
@@ -548,7 +546,6 @@
         </div>
       </div>
 
-      <!-- PAGE 2: OPERATIONS -->
       <div id="operations" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card purple">
@@ -587,17 +584,16 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-clock"></i> Express Orders per Hour <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click bar to filter)</span></div>
+            <div class="chart-title"><i class="fas fa-clock"></i> Express Orders per Hour</div>
             <div id="opsExpressHour" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-list"></i> Orders by Type <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click bar to filter)</span></div>
+            <div class="chart-title"><i class="fas fa-list"></i> Orders by Type</div>
             <div id="opsOrderType" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
       </div>
 
-      <!-- PAGE 3: FINANCIAL -->
       <div id="financial" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card success">
@@ -659,7 +655,6 @@
         </div>
       </div>
 
-      <!-- PAGE 4: CATEGORIES -->
       <div id="categories" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card info">
@@ -726,7 +721,6 @@
         </div>
       </div>
 
-      <!-- PAGE 5: LATE ANALYSIS -->
       <div id="lateAnalysis" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card danger">
@@ -765,7 +759,7 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-chart-pie"></i> Late vs On-Time Distribution <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click to filter)</span></div>
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> Late vs On-Time Distribution</div>
             <div id="lateDistributionChart" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
@@ -796,7 +790,6 @@ function showPage(pageId, element) {
   };
   document.getElementById('pageTitle').innerHTML = titles[pageId];
 
-  // ✅ Lazy Loading: Render charts only when page is shown
   if (cachedData && !chartsRendered[pageId]) {
     setTimeout(() => {
       renderPageCharts(pageId, cachedData);
@@ -914,10 +907,10 @@ function renderKPIs(data) {
   const cats = data.categoryMetrics;
 
   document.getElementById('execTotalOrders').textContent = fmt.format(kpis.totalOrders);
-  document.getElementById('execSuccessRate').textContent = `Success Rate: ${kpis.successRate}%`;
+  document.getElementById('execSuccessRate').textContent = 'Success Rate: ' + kpis.successRate + '%';
   document.getElementById('execOnTimeRate').textContent = kpis.onTimeRate + '%';
   document.getElementById('execLateOrders').textContent = fmt.format(kpis.lateOrders);
-  document.getElementById('execLateRate').textContent = `Late Rate: ${kpis.lateRate}%`;
+  document.getElementById('execLateRate').textContent = 'Late Rate: ' + kpis.lateRate + '%';
   document.getElementById('execNmvRate').textContent = kpis.nmvRate + '%';
 
   document.getElementById('opsCouriers').textContent = fmt.format(kpis.activeCouriers);
@@ -939,26 +932,23 @@ function renderKPIs(data) {
   document.getElementById('catSuccessRate').textContent = kpis.successRate + '%';
 
   document.getElementById('lateTotal').textContent = fmt.format(kpis.lateOrders);
-  document.getElementById('latePercentage').textContent = `Late Rate: ${kpis.lateRate}%`;
+  document.getElementById('latePercentage').textContent = 'Late Rate: ' + kpis.lateRate + '%';
   document.getElementById('lateOnTime').textContent = fmt.format(kpis.onTimeOrders);
 
-  // Supplier Table
   const supTable = document.getElementById('execSupplierTable');
   supTable.innerHTML = '';
   data.charts.supplierReliability.slice(0, 10).forEach(sup => {
     const badgeClass = sup.success_rate >= 90 ? 'success' : (sup.success_rate >= 80 ? 'warning' : 'danger');
     const badgeText = sup.success_rate >= 90 ? 'Excellent' : (sup.success_rate >= 80 ? 'Good' : 'Needs Attention');
     const isActive = currentFilters.supplier === sup.name.toLowerCase();
-    supTable.innerHTML += `
-      <tr class="clickable-row ${isActive ? 'active-filter' : ''}" onclick="filterBySupplier('${sup.name}')">
-        <td style="font-weight:600; text-transform:capitalize;">${sup.name}</td>
-        <td>${fmt.format(sup.orders)}</td>
-        <td style="color:var(--${badgeClass}); font-weight:700;">${sup.success_rate}%</td>
-        <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-      </tr>`;
+    supTable.innerHTML += '<tr class="clickable-row ' + (isActive ? 'active-filter' : '') + '" onclick="filterBySupplier(\'' + sup.name + '\')">' +
+      '<td style="font-weight:600; text-transform:capitalize;">' + sup.name + '</td>' +
+      '<td>' + fmt.format(sup.orders) + '</td>' +
+      '<td style="color:var(--' + badgeClass + '); font-weight:700;">' + sup.success_rate + '%</td>' +
+      '<td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td>' +
+      '</tr>';
   });
 
-  // Category Table
   const catTable = document.getElementById('catPerformanceTable');
   catTable.innerHTML = '';
   const catData = [
@@ -968,14 +958,13 @@ function renderKPIs(data) {
   ];
   catData.forEach(cat => {
     const isActive = currentFilters.category === cat.name.toLowerCase();
-    catTable.innerHTML += `
-      <tr class="clickable-row ${isActive ? 'active-filter' : ''}" onclick="filterByCategory('${cat.name}')">
-        <td style="font-weight:700; color:${cat.color};"><i class="fas ${cat.icon}" style="margin-right:8px;"></i>${cat.name}</td>
-        <td>${fmt.format(cat.total)}</td>
-        <td style="color:var(--danger); font-weight:600;">${fmt.format(cat.late)}</td>
-        <td style="color:var(--warning); font-weight:700;">${cat.delayRate}</td>
-        <td>${cat.ofTotal}</td>
-      </tr>`;
+    catTable.innerHTML += '<tr class="clickable-row ' + (isActive ? 'active-filter' : '') + '" onclick="filterByCategory(\'' + cat.name + '\')">' +
+      '<td style="font-weight:700; color:' + cat.color + ';"><i class="fas ' + cat.icon + '" style="margin-right:8px;"></i>' + cat.name + '</td>' +
+      '<td>' + fmt.format(cat.total) + '</td>' +
+      '<td style="color:var(--danger); font-weight:600;">' + fmt.format(cat.late) + '</td>' +
+      '<td style="color:var(--warning); font-weight:700;">' + cat.delayRate + '</td>' +
+      '<td>' + cat.ofTotal + '</td>' +
+      '</tr>';
   });
 }
 
@@ -984,11 +973,21 @@ function renderPageCharts(pageId, data) {
   const cats = data.categoryMetrics;
 
   if (pageId === 'executive') {
-    renderClickablePieChart('execOrderStatus', charts.orderStatus, ['Sold', 'Undelivered', 'PD', 'Not Available'], ['#06d6a0', '#ef476f', '#ffd166', '#4361ee'], 'orderStatus');
+    renderPieChart('execOrderStatus', charts.orderStatus, ['Sold', 'Undelivered', 'PD', 'Not Available'], ['#06d6a0', '#ef476f', '#ffd166', '#4361ee']);
     renderScheduledSlotsChart('execScheduledSlots', charts.scheduledSlots);
   } else if (pageId === 'operations') {
-    renderClickableBarChart('opsExpressHour', charts.expressPerHour.map(d=>d.hour), charts.expressPerHour.map(d=>d.total), charts.expressPerHour.map(d=>d.late));
-    renderClickableHorizontalBar('opsOrderType', charts.orderTypes.map(d=>d.name), charts.orderTypes.map(d=>d.value), ['#4361ee', '#118ab2', '#ef476f'], 'orderType');
+    renderBarChart('opsExpressHour', charts.expressPerHour.map(d=>d.hour), charts.expressPerHour.map(d=>d.total), charts.expressPerHour.map(d=>d.late));
+    renderHorizontalBar('opsOrderType', charts.orderTypes.map(d=>d.name), charts.orderTypes.map(d=>d.value), ['#4361ee', '#118ab2', '#ef476f']);
+    
+    setTimeout(() => {
+      const plotDiv = document.getElementById('opsOrderType');
+      if (plotDiv) {
+        plotDiv.on('plotly_click', function(clickData) {
+          const clickedLabel = clickData.points[0].y;
+          filterByOrderType(clickedLabel.toLowerCase());
+        });
+      }
+    }, 500);
   } else if (pageId === 'categories') {
     renderTreemap('catTreemap', cats);
     renderPieChart('catPieChart', [
@@ -1001,10 +1000,10 @@ function renderPageCharts(pageId, data) {
     const totalExpressLate = charts.lateReasonsTotals?.express || 0;
     document.getElementById('lateScheduled').textContent = fmt.format(totalScheduledLate);
     document.getElementById('lateExpress').textContent = fmt.format(totalExpressLate);
-    renderClickablePieChart('lateDistributionChart', [
+    renderPieChart('lateDistributionChart', [
       {name: 'On-Time', value: data.kpis.onTimeOrders},
       {name: 'Late', value: data.kpis.lateOrders}
-    ], null, ['#06d6a0', '#ef476f'], 'lateDistribution');
+    ], null, ['#06d6a0', '#ef476f']);
   }
 }
 
@@ -1016,22 +1015,6 @@ function renderPieChart(divId, data, customLabels, colors) {
     textinfo: 'label+percent', textposition: 'inside', textfont: { size: 13, color: 'white', weight: 'bold' },
     hovertemplate: '<b>%{label}</b><br>Value: %{value}<br>Percentage: %{percent}<extra></extra>'
   }], { ...baseLayout, showlegend: true, legend: { orientation: 'h', y: -0.1, x: 0.5, xanchor: 'center' }, margin: { t: 30, b: 50, l: 20, r: 20 } }, config);
-}
-
-function renderClickablePieChart(divId, data, customLabels, colors, filterType) {
-  renderPieChart(divId, data, customLabels, colors);
-  
-  const plotDiv = document.getElementById(divId);
-  plotDiv.on('plotly_click', function(clickData) {
-    const clickedLabel = clickData.points[0].label;
-    if (filterType === 'orderStatus') {
-      // Filter by status (Sold, Returned, etc.)
-      console.log('Filter by status:', clickedLabel);
-    } else if (filterType === 'lateDistribution') {
-      // Filter by late/on-time
-      console.log('Filter by distribution:', clickedLabel);
-    }
-  });
 }
 
 function renderScheduledSlotsChart(divId, slots) {
@@ -1051,7 +1034,7 @@ function renderScheduledSlotsChart(divId, slots) {
   }, config);
 }
 
-function renderClickableBarChart(divId, xLabels, totalData, lateData) {
+function renderBarChart(divId, xLabels, totalData, lateData) {
   Plotly.react(divId, [
     { type: 'bar', x: xLabels, y: totalData, name: 'Total Orders', marker: { color: '#4361ee' } },
     { type: 'bar', x: xLabels, y: lateData, name: 'Late Orders', marker: { color: '#ef476f' } }
@@ -1062,15 +1045,9 @@ function renderClickableBarChart(divId, xLabels, totalData, lateData) {
     yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' },
     xaxis: { gridcolor: '#e2e8f0' }
   }, config);
-  
-  const plotDiv = document.getElementById(divId);
-  plotDiv.on('plotly_click', function(data) {
-    const clickedHour = data.points[0].x;
-    console.log('Filter by hour:', clickedHour);
-  });
 }
 
-function renderClickableHorizontalBar(divId, yLabels, xData, colors, filterKey) {
+function renderHorizontalBar(divId, yLabels, xData, colors) {
   Plotly.react(divId, [{
     type: 'bar', orientation: 'h', y: yLabels, x: xData, marker: { color: colors, line: { color: 'white', width: 2 } },
     text: xData, textposition: 'outside', textfont: { size: 12, color: '#1e293b', weight: 'bold' },
@@ -1080,12 +1057,6 @@ function renderClickableHorizontalBar(divId, yLabels, xData, colors, filterKey) 
     xaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' }, 
     yaxis: { autorange: 'reversed', gridcolor: '#e2e8f0' } 
   }, config);
-  
-  const plotDiv = document.getElementById(divId);
-  plotDiv.on('plotly_click', function(data) {
-    const clickedLabel = data.points[0].y;
-    filterByOrderType(clickedLabel.toLowerCase());
-  });
 }
 
 function renderTreemap(divId, cats) {
@@ -1115,8 +1086,7 @@ function renderTreemap(divId, cats) {
     customdata: lateRates
   }], { 
     ...baseLayout, 
-    margin: { t: 10, b: 10, l: 10, r: 10 },
-    treemap: { textposition: 'middle center' }
+    margin: { t: 10, b: 10, l: 10, r: 10 }
   }, config);
 }
 
