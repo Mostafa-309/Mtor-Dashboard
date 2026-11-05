@@ -9,446 +9,83 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #4361ee;
-    --primary-dark: #3a56d4;
-    --success: #06d6a0;
-    --success-dark: #05c291;
-    --danger: #ef476f;
-    --danger-dark: #d6385e;
-    --warning: #ffd166;
-    --warning-dark: #e6bc5c;
-    --info: #118ab2;
-    --info-dark: #0f7a9d;
-    --purple: #7209b7;
-    --purple-dark: #5f0899;
-    --bg-color: #f8f9fc;
-    --card-bg: #ffffff;
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-color: #e2e8f0;
-    --shadow: rgba(0, 0, 0, 0.05);
-    --sidebar-bg: #0f172a;
-    --sidebar-active: #1e293b;
-    --sidebar-hover: #334155;
-    --sidebar-text: #94a3b8;
-    --sidebar-text-active: #ffffff;
+    --primary: #4361ee; --success: #06d6a0; --danger: #ef476f; --warning: #ffd166;
+    --info: #118ab2; --purple: #7209b7; --bg-color: #f8f9fc; --card-bg: #ffffff;
+    --text-primary: #1e293b; --text-secondary: #64748b; --border-color: #e2e8f0;
+    --sidebar-bg: #0f172a; --sidebar-active: #1e293b; --sidebar-text: #94a3b8;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  
-  body { 
-    font-family: 'Inter', sans-serif; 
-    background: var(--bg-color);
-    color: var(--text-primary); 
-    display: flex;
-    min-height: 100vh;
-  }
-
-  .loader {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(248, 249, 252, 0.98);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 9999; flex-direction: column;
-  }
+  body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-primary); display: flex; min-height: 100vh; }
+  .loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(248, 249, 252, 0.98); display: flex; justify-content: center; align-items: center; z-index: 9999; flex-direction: column; }
   .loader.hidden { display: none; }
-  .spinner {
-    width: 50px; height: 50px; border: 4px solid #e0e7ff;
-    border-top: 4px solid var(--primary); border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
+  .spinner { width: 50px; height: 50px; border: 4px solid #e0e7ff; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-  .sidebar {
-    width: 280px;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    height: 100vh;
-    left: 0;
-    top: 0;
-    z-index: 100;
-    transition: all 0.3s ease;
-    box-shadow: 4px 0 12px rgba(0,0,0,0.08);
-  }
-
-  .sidebar-header {
-    padding: 28px 24px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.02);
-  }
-  .sidebar-header h2 {
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    letter-spacing: -0.5px;
-  }
+  .sidebar { width: 280px; background: var(--sidebar-bg); color: var(--sidebar-text); display: flex; flex-direction: column; position: fixed; height: 100vh; left: 0; top: 0; z-index: 100; }
+  .sidebar-header { padding: 28px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-header h2 { color: white; font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
   .sidebar-header h2 i { color: var(--primary); font-size: 24px; }
-
   .nav-links { list-style: none; padding: 24px 16px; flex: 1; }
   .nav-links li { margin-bottom: 8px; }
-  .nav-links a {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 18px;
-    color: var(--sidebar-text);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.25s;
-    border-radius: 10px;
-    border-left: 3px solid transparent;
-    cursor: pointer;
-  }
-  .nav-links a:hover {
-    background: var(--sidebar-hover);
-    color: white;
-    transform: translateX(4px);
-  }
-  .nav-links a.active {
-    background: var(--sidebar-active);
-    color: var(--sidebar-text-active);
-    border-left-color: var(--primary);
-    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.15);
-  }
-  .nav-links a i { width: 22px; text-align: center; font-size: 16px; }
-
-  .main-content {
-    margin-left: 280px;
-    flex: 1;
-    width: calc(100% - 280px);
-  }
-
-  .global-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: white;
-    padding: 20px 32px;
-    border-bottom: 2px solid var(--border-color);
-    box-shadow: 0 2px 8px var(--shadow);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .global-header h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .global-header h1 span { color: var(--primary); }
-
-  .header-controls {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .date-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: var(--bg-color);
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-  }
-  .date-controls input {
-    padding: 8px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-family: inherit;
-    font-size: 13px;
-    background: white;
-  }
-  .date-controls input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-  }
-  .btn {
-    padding: 10px 18px;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-  }
+  .nav-links a { display: flex; align-items: center; gap: 14px; padding: 14px 18px; color: var(--sidebar-text); text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 10px; cursor: pointer; transition: all 0.25s; }
+  .nav-links a:hover { background: var(--sidebar-active); color: white; }
+  .nav-links a.active { background: var(--sidebar-active); color: white; border-left: 3px solid var(--primary); }
+  .nav-links a i { width: 22px; text-align: center; }
+  .main-content { margin-left: 280px; flex: 1; width: calc(100% - 280px); }
+  .global-header { position: sticky; top: 0; z-index: 50; background: white; padding: 20px 32px; border-bottom: 2px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .global-header h1 { font-size: 22px; font-weight: 700; }
+  .date-controls { display: flex; gap: 10px; align-items: center; background: var(--bg-color); padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border-color); }
+  .date-controls input { padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; }
+  .btn { padding: 10px 18px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+  .btn:hover { background: #3a56d4; transform: translateY(-1px); }
   .btn-secondary { background: var(--text-secondary); }
-  .btn-secondary:hover { background: var(--text-primary); }
-
-  .filter-bar {
-    background: linear-gradient(135deg, rgba(67, 97, 238, 0.08), rgba(114, 9, 183, 0.08));
-    padding: 14px 32px;
-    border-bottom: 1px solid var(--border-color);
-    display: none;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .filter-bar.active { display: flex; }
-  .filter-bar-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .filter-tag {
-    background: white;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--primary);
-    border: 1px solid var(--primary);
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px var(--shadow);
-  }
-  .filter-tag .remove-filter {
-    cursor: pointer;
-    color: var(--danger);
-    font-weight: 700;
-    transition: transform 0.2s;
-  }
-  .filter-tag .remove-filter:hover { transform: scale(1.2); }
-  .clear-all-filters {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .clear-all-filters:hover { background: var(--danger-dark); }
-
   .page-content { padding: 32px; }
-
   .page-section { display: none; animation: fadeIn 0.4s ease; }
   .page-section.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-  .kpi-card {
-    background: var(--card-bg);
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 2px 12px var(--shadow);
-    border: 1px solid var(--border-color);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-  .kpi-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  }
-  .kpi-card::before {
-    content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
-    background: var(--primary);
-  }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-bottom: 32px; }
+  .kpi-card { background: var(--card-bg); padding: 28px; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color); position: relative; overflow: hidden; }
+  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--primary); }
   .kpi-card.success::before { background: var(--success); }
   .kpi-card.danger::before { background: var(--danger); }
   .kpi-card.warning::before { background: var(--warning); }
   .kpi-card.info::before { background: var(--info); }
   .kpi-card.purple::before { background: var(--purple); }
-
-  .kpi-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-  .kpi-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-  }
+  .kpi-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .kpi-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
   .kpi-icon.blue { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
   .kpi-icon.green { background: rgba(6, 214, 160, 0.1); color: var(--success); }
   .kpi-icon.red { background: rgba(239, 71, 111, 0.1); color: var(--danger); }
   .kpi-icon.yellow { background: rgba(255, 209, 102, 0.1); color: var(--warning); }
   .kpi-icon.purple { background: rgba(114, 9, 183, 0.1); color: var(--purple); }
-  .kpi-icon.cyan { background: rgba(17, 138, 178, 0.1); color: var(--info); }
-
-  .kpi-title {
-    font-size: 12px;
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 8px;
-  }
-  .kpi-value {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    line-height: 1.2;
-  }
-  .kpi-trend {
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border-color);
-    margin-top: 12px;
-  }
+  .kpi-title { font-size: 12px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .kpi-value { font-size: 32px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; line-height: 1.2; }
+  .kpi-trend { font-size: 13px; font-weight: 600; padding-top: 12px; border-top: 1px solid var(--border-color); margin-top: 12px; }
   .trend-up { color: var(--success); }
   .trend-down { color: var(--danger); }
-  .kpi-sub { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
-
-  .chart-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
-    gap: 28px;
-    margin-bottom: 32px;
-  }
-  .chart-card {
-    background: var(--card-bg);
-    padding: 28px;
-    border-radius: 14px;
-    box-shadow: 0 2px 12px var(--shadow);
-    border: 1px solid var(--border-color);
-  }
-  .chart-title {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 24px;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .chart-title i { color: var(--primary); font-size: 18px; }
-
-  .table-container {
-    background: var(--card-bg);
-    border-radius: 14px;
-    box-shadow: 0 2px 12px var(--shadow);
-    border: 1px solid var(--border-color);
-    overflow: hidden;
-    margin-bottom: 32px;
-  }
-  .table-header {
-    padding: 24px 28px;
-    border-bottom: 2px solid var(--border-color);
-    font-size: 17px;
-    font-weight: 700;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .table-header i { color: var(--primary); }
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(520px, 1fr)); gap: 28px; margin-bottom: 32px; }
+  .chart-card { background: var(--card-bg); padding: 28px; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color); }
+  .chart-title { font-size: 17px; font-weight: 700; margin-bottom: 24px; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+  .chart-title i { color: var(--primary); }
+  .table-container { background: var(--card-bg); border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 32px; }
+  .table-header { padding: 24px 28px; border-bottom: 2px solid var(--border-color); font-size: 17px; font-weight: 700; color: var(--text-primary); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th, td { padding: 16px 28px; text-align: left; border-bottom: 1px solid var(--border-color); }
-  th {
-    background: var(--bg-color);
-    color: var(--text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-  }
-  tr:last-child td { border-bottom: none; }
+  th { background: var(--bg-color); color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 11px; }
   tr:hover { background: rgba(67, 97, 238, 0.02); }
-  
-  .clickable-row { cursor: pointer; transition: all 0.2s; }
-  .clickable-row:hover {
-    background: rgba(67, 97, 238, 0.08) !important;
-    transform: translateX(4px);
-  }
-  .clickable-row.active-filter {
-    background: rgba(67, 97, 238, 0.12) !important;
-    border-left: 4px solid var(--primary);
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
+  .clickable-row { cursor: pointer; }
+  .clickable-row:hover { background: rgba(67, 97, 238, 0.08) !important; }
+  .badge { display: inline-flex; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
   .badge.success { background: rgba(6, 214, 160, 0.15); color: var(--success); }
   .badge.danger { background: rgba(239, 71, 111, 0.15); color: var(--danger); }
   .badge.warning { background: rgba(255, 209, 102, 0.15); color: var(--warning); }
-  .badge.info { background: rgba(17, 138, 178, 0.15); color: var(--info); }
-
-  .chart-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 380px;
-    color: var(--text-secondary);
-    font-size: 14px;
-  }
-  .chart-loading i {
-    margin-right: 8px;
-    animation: spin 1s linear infinite;
-  }
-
-  @media (max-width: 1024px) {
-    .sidebar { width: 76px; }
-    .sidebar-header h2 span, .nav-links a span { display: none; }
-    .nav-links a { justify-content: center; padding: 16px; }
-    .main-content { margin-left: 76px; width: calc(100% - 76px); }
-  }
-  @media (max-width: 768px) {
-    .chart-grid { grid-template-columns: 1fr; }
-    .kpi-grid { grid-template-columns: 1fr 1fr; }
-    .global-header { flex-direction: column; align-items: flex-start; }
-    .page-content { padding: 20px; }
-  }
+  @media (max-width: 1024px) { .sidebar { width: 76px; } .sidebar-header h2 span, .nav-links a span { display: none; } .nav-links a { justify-content: center; } .main-content { margin-left: 76px; width: calc(100% - 76px); } }
+  @media (max-width: 768px) { .chart-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: 1fr 1fr; } }
 </style>
 </head>
 <body>
-
   <div id="loader" class="loader">
     <div class="spinner"></div>
-    <div style="margin-top: 15px; font-size: 14px; color: var(--primary); font-weight: 600;">Loading dashboard data...</div>
+    <div style="margin-top: 15px; font-size: 14px; color: var(--primary); font-weight: 600;">Loading dashboard...</div>
   </div>
 
   <nav class="sidebar">
@@ -456,7 +93,7 @@
       <h2><i class="fas fa-truck-fast"></i> <span>Mtor Dashboard</span></h2>
     </div>
     <ul class="nav-links">
-      <li><a href="#" class="active" onclick="showPage('executive', this)"><i class="fas fa-chart-line"></i> <span>Executive Summary</span></a></li>
+      <li><a href="#" class="active" onclick="showPage('executive', this)"><i class="fas fa-chart-line"></i> <span>Executive</span></a></li>
       <li><a href="#" onclick="showPage('operations', this)"><i class="fas fa-cogs"></i> <span>Operations</span></a></li>
       <li><a href="#" onclick="showPage('financial', this)"><i class="fas fa-wallet"></i> <span>Financial</span></a></li>
       <li><a href="#" onclick="showPage('categories', this)"><i class="fas fa-boxes-stacked"></i> <span>Categories</span></a></li>
@@ -466,82 +103,61 @@
 
   <main class="main-content">
     <div class="global-header">
-      <h1 id="pageTitle"><span>📊</span> Executive Summary</h1>
-      <div class="header-controls">
-        <div class="date-controls">
-          <i class="far fa-calendar" style="color: var(--text-secondary);"></i>
-          <input type="date" id="startDate">
-          <span style="color: var(--text-secondary); font-weight: 600;">to</span>
-          <input type="date" id="endDate">
-        </div>
-        <button class="btn" onclick="applyFilters()"><i class="fas fa-sync-alt"></i> Apply</button>
-        <button class="btn btn-secondary" onclick="resetDate()"><i class="fas fa-undo"></i> Reset</button>
+      <h1 id="pageTitle">📊 Executive Summary</h1>
+      <div class="date-controls">
+        <i class="far fa-calendar"></i>
+        <input type="date" id="startDate">
+        <span>to</span>
+        <input type="date" id="endDate">
+        <button class="btn" onclick="fetchAndRender()">Apply</button>
       </div>
-    </div>
-
-    <div id="filterBar" class="filter-bar">
-      <div class="filter-bar-label"><i class="fas fa-filter"></i> Active Filters:</div>
-      <div id="filterTags"></div>
-      <button class="clear-all-filters" onclick="clearAllFilters()"><i class="fas fa-times"></i> Clear All</button>
     </div>
 
     <div class="page-content">
       <div id="executive" class="page-section active">
         <div class="kpi-grid">
           <div class="kpi-card info">
-            <div class="kpi-header">
-              <div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon blue"><i class="fas fa-shopping-cart"></i></div></div>
             <div class="kpi-title">Total Orders</div>
             <div class="kpi-value" id="execTotalOrders" style="color: var(--primary);">-</div>
-            <div class="kpi-trend" id="execSuccessRate">Success Rate: -</div>
+            <div class="kpi-trend" id="execSuccessRate">-</div>
           </div>
           <div class="kpi-card success">
-            <div class="kpi-header">
-              <div class="kpi-icon green"><i class="fas fa-check-circle"></i></div>
-            </div>
-            <div class="kpi-title">On-Time Delivery Rate</div>
+            <div class="kpi-header"><div class="kpi-icon green"><i class="fas fa-check-circle"></i></div></div>
+            <div class="kpi-title">On-Time Rate</div>
             <div class="kpi-value" id="execOnTimeRate" style="color: var(--success);">-</div>
-            <div class="kpi-trend trend-up"><i class="fas fa-arrow-up"></i> Target: > 80%</div>
+            <div class="kpi-trend trend-up">Target: > 80%</div>
           </div>
           <div class="kpi-card danger">
-            <div class="kpi-header">
-              <div class="kpi-icon red"><i class="fas fa-clock"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon red"><i class="fas fa-clock"></i></div></div>
             <div class="kpi-title">Late Orders</div>
             <div class="kpi-value" id="execLateOrders" style="color: var(--danger);">-</div>
-            <div class="kpi-trend trend-down" id="execLateRate">Late Rate: -</div>
+            <div class="kpi-trend trend-down" id="execLateRate">-</div>
           </div>
           <div class="kpi-card warning">
-            <div class="kpi-header">
-              <div class="kpi-icon yellow"><i class="fas fa-percentage"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon yellow"><i class="fas fa-percentage"></i></div></div>
             <div class="kpi-title">NMV Rate</div>
             <div class="kpi-value" id="execNmvRate" style="color: var(--warning);">-</div>
-            <div class="kpi-sub">Net vs Gross Revenue</div>
+            <div class="kpi-trend">Net vs Gross</div>
           </div>
         </div>
 
         <div class="chart-grid">
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-chart-pie"></i> Order Status Breakdown</div>
-            <div id="execOrderStatus" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="execOrderStatus" style="height: 380px;"></div>
           </div>
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-clock"></i> Scheduled Slots Performance</div>
-            <div id="execScheduledSlots" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="execScheduledSlots" style="height: 380px;"></div>
           </div>
         </div>
 
         <div class="table-container">
-          <div class="table-header"><i class="fas fa-star"></i> Top Performing Suppliers <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click to filter)</span></div>
+          <div class="table-header">Top Performing Suppliers</div>
           <table>
-            <thead>
-              <tr><th>Supplier Name</th><th>Total Orders</th><th>Success Rate</th><th>Performance</th></tr>
-            </thead>
-            <tbody id="execSupplierTable">
-              <tr><td colspan="4" style="text-align:center; padding: 24px; color: var(--text-secondary);">Loading...</td></tr>
-            </tbody>
+            <thead><tr><th>Supplier Name</th><th>Total Orders</th><th>Success Rate</th><th>Performance</th></tr></thead>
+            <tbody id="execSupplierTable"></tbody>
           </table>
         </div>
       </div>
@@ -549,47 +165,39 @@
       <div id="operations" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card purple">
-            <div class="kpi-header">
-              <div class="kpi-icon purple"><i class="fas fa-motorcycle"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon purple"><i class="fas fa-motorcycle"></i></div></div>
             <div class="kpi-title">Active Couriers</div>
             <div class="kpi-value" id="opsCouriers" style="color: var(--purple);">-</div>
-            <div class="kpi-sub">Unique IDs</div>
+            <div class="kpi-trend">Unique IDs</div>
           </div>
           <div class="kpi-card info">
-            <div class="kpi-header">
-              <div class="kpi-icon cyan"><i class="fas fa-tasks"></i></div>
-            </div>
-            <div class="kpi-title">Avg Orders / Courier</div>
+            <div class="kpi-header"><div class="kpi-icon blue"><i class="fas fa-tasks"></i></div></div>
+            <div class="kpi-title">Avg Orders/Courier</div>
             <div class="kpi-value" id="opsAvgLoad" style="color: var(--info);">-</div>
-            <div class="kpi-sub">Avg Daily Load</div>
+            <div class="kpi-trend">Avg Daily Load</div>
           </div>
           <div class="kpi-card warning">
-            <div class="kpi-header">
-              <div class="kpi-icon yellow"><i class="fas fa-coins"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon yellow"><i class="fas fa-coins"></i></div></div>
             <div class="kpi-title">Total Logistics Cost</div>
             <div class="kpi-value" id="opsLogisticsCost" style="color: var(--warning);">-</div>
-            <div class="kpi-sub">All Logistics Expenses</div>
+            <div class="kpi-trend">All Expenses</div>
           </div>
           <div class="kpi-card danger">
-            <div class="kpi-header">
-              <div class="kpi-icon red"><i class="fas fa-bolt"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon red"><i class="fas fa-bolt"></i></div></div>
             <div class="kpi-title">Rush Hour Late %</div>
             <div class="kpi-value" id="opsRushLate" style="color: var(--danger);">-</div>
-            <div class="kpi-sub">Express + Normal</div>
+            <div class="kpi-trend">Express + Normal</div>
           </div>
         </div>
 
         <div class="chart-grid">
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-clock"></i> Express Orders per Hour</div>
-            <div id="opsExpressHour" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="opsExpressHour" style="height: 380px;"></div>
           </div>
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-list"></i> Orders by Type</div>
-            <div id="opsOrderType" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="opsOrderType" style="height: 380px;"></div>
           </div>
         </div>
       </div>
@@ -597,60 +205,28 @@
       <div id="financial" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card success">
-            <div class="kpi-header">
-              <div class="kpi-icon green"><i class="fas fa-dollar-sign"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon green"><i class="fas fa-dollar-sign"></i></div></div>
             <div class="kpi-title">Total GMV</div>
             <div class="kpi-value" id="finGmv" style="color: var(--success);">-</div>
-            <div class="kpi-sub">Gross Merchandise Value</div>
+            <div class="kpi-trend">Gross Value</div>
           </div>
           <div class="kpi-card info">
-            <div class="kpi-header">
-              <div class="kpi-icon cyan"><i class="fas fa-money-bill-wave"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon blue"><i class="fas fa-money-bill-wave"></i></div></div>
             <div class="kpi-title">Total NMV</div>
             <div class="kpi-value" id="finNmv" style="color: var(--info);">-</div>
-            <div class="kpi-sub">Net Merchandise Value</div>
+            <div class="kpi-trend">Net Value</div>
           </div>
           <div class="kpi-card purple">
-            <div class="kpi-header">
-              <div class="kpi-icon purple"><i class="fas fa-piggy-bank"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon purple"><i class="fas fa-piggy-bank"></i></div></div>
             <div class="kpi-title">Total Margin</div>
             <div class="kpi-value" id="finMargin" style="color: var(--purple);">-</div>
-            <div class="kpi-sub">After Discounts</div>
+            <div class="kpi-trend">After Discounts</div>
           </div>
           <div class="kpi-card warning">
-            <div class="kpi-header">
-              <div class="kpi-icon yellow"><i class="fas fa-ticket-alt"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon yellow"><i class="fas fa-ticket-alt"></i></div></div>
             <div class="kpi-title">Avg Ticket Size</div>
             <div class="kpi-value" id="finAvgTicket" style="color: var(--warning);">-</div>
-            <div class="kpi-sub">Per Order</div>
-          </div>
-        </div>
-
-        <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <div class="kpi-icon blue"><i class="fas fa-shipping-fast"></i></div>
-            </div>
-            <div class="kpi-title">Delivery Fees</div>
-            <div class="kpi-value" id="finDelFees" style="font-size: 24px; color: var(--primary);">-</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <div class="kpi-icon purple"><i class="fas fa-plus-circle"></i></div>
-            </div>
-            <div class="kpi-title">Additional Fees</div>
-            <div class="kpi-value" id="finAddFees" style="font-size: 24px; color: var(--purple);">-</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-header">
-              <div class="kpi-icon green"><i class="fas fa-concierge-bell"></i></div>
-            </div>
-            <div class="kpi-title">Service Fees</div>
-            <div class="kpi-value" id="finSvcFees" style="font-size: 24px; color: var(--success);">-</div>
+            <div class="kpi-trend">Per Order</div>
           </div>
         </div>
       </div>
@@ -658,65 +234,43 @@
       <div id="categories" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card info">
-            <div class="kpi-header">
-              <div class="kpi-icon cyan"><i class="fas fa-warehouse"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon blue"><i class="fas fa-warehouse"></i></div></div>
             <div class="kpi-title">Inventory Orders</div>
             <div class="kpi-value" id="catInventory" style="color: var(--info);">-</div>
-            <div class="kpi-sub">From Inventory</div>
           </div>
           <div class="kpi-card purple">
-            <div class="kpi-header">
-              <div class="kpi-icon purple"><i class="fas fa-box-open"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon purple"><i class="fas fa-box-open"></i></div></div>
             <div class="kpi-title">Consignment Orders</div>
             <div class="kpi-value" id="catConsignment" style="color: var(--purple);">-</div>
-            <div class="kpi-sub">From Consignment</div>
           </div>
           <div class="kpi-card success">
-            <div class="kpi-header">
-              <div class="kpi-icon green"><i class="fas fa-users"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon green"><i class="fas fa-users"></i></div></div>
             <div class="kpi-title">Trusted Suppliers</div>
             <div class="kpi-value" id="catSuppliers" style="color: var(--success);">-</div>
-            <div class="kpi-sub">Other Suppliers</div>
           </div>
           <div class="kpi-card warning">
-            <div class="kpi-header">
-              <div class="kpi-icon yellow"><i class="fas fa-trophy"></i></div>
-            </div>
-            <div class="kpi-title">Overall Success Rate</div>
+            <div class="kpi-header"><div class="kpi-icon yellow"><i class="fas fa-trophy"></i></div></div>
+            <div class="kpi-title">Success Rate</div>
             <div class="kpi-value" id="catSuccessRate" style="color: var(--warning);">-</div>
-            <div class="kpi-sub">All Categories</div>
           </div>
         </div>
 
         <div class="table-container">
-          <div class="table-header"><i class="fas fa-table"></i> Category Performance <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click row to filter)</span></div>
+          <div class="table-header">Category Performance</div>
           <table>
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Total Orders</th>
-                <th>Late Orders</th>
-                <th>Delay Rate</th>
-                <th>% of Total</th>
-              </tr>
-            </thead>
-            <tbody id="catPerformanceTable">
-              <tr><td colspan="5" style="text-align:center; padding: 24px; color: var(--text-secondary);">Loading...</td></tr>
-            </tbody>
+            <thead><tr><th>Category</th><th>Total Orders</th><th>Late Orders</th><th>Delay Rate</th><th>% of Total</th></tr></thead>
+            <tbody id="catPerformanceTable"></tbody>
           </table>
         </div>
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-th-large"></i> Orders by Category (Treemap)</div>
-            <div id="catTreemap" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div class="chart-title"><i class="fas fa-th-large"></i> Orders by Category</div>
+            <div id="catChart" style="height: 380px;"></div>
           </div>
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-chart-pie"></i> Inventory vs Consignment</div>
-            <div id="catPieChart" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="catPieChart" style="height: 380px;"></div>
           </div>
         </div>
       </div>
@@ -724,43 +278,32 @@
       <div id="lateAnalysis" class="page-section">
         <div class="kpi-grid">
           <div class="kpi-card danger">
-            <div class="kpi-header">
-              <div class="kpi-icon red"><i class="fas fa-exclamation-circle"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon red"><i class="fas fa-exclamation-circle"></i></div></div>
             <div class="kpi-title">Total Late Orders</div>
             <div class="kpi-value" id="lateTotal" style="color: var(--danger);">-</div>
-            <div class="kpi-trend trend-down" id="latePercentage">Late Rate: -</div>
+            <div class="kpi-trend trend-down" id="latePercentage">-</div>
           </div>
           <div class="kpi-card warning">
-            <div class="kpi-header">
-              <div class="kpi-icon yellow"><i class="fas fa-calendar-day"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon yellow"><i class="fas fa-calendar-day"></i></div></div>
             <div class="kpi-title">Scheduled Late</div>
             <div class="kpi-value" id="lateScheduled" style="color: var(--warning);">-</div>
-            <div class="kpi-sub">From Scheduled Orders</div>
           </div>
           <div class="kpi-card danger">
-            <div class="kpi-header">
-              <div class="kpi-icon red"><i class="fas fa-bolt"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon red"><i class="fas fa-bolt"></i></div></div>
             <div class="kpi-title">Express Late</div>
             <div class="kpi-value" id="lateExpress" style="color: var(--danger);">-</div>
-            <div class="kpi-sub">Express + Normal</div>
           </div>
           <div class="kpi-card info">
-            <div class="kpi-header">
-              <div class="kpi-icon cyan"><i class="fas fa-chart-line"></i></div>
-            </div>
+            <div class="kpi-header"><div class="kpi-icon blue"><i class="fas fa-check-circle"></i></div></div>
             <div class="kpi-title">On-Time Orders</div>
             <div class="kpi-value" id="lateOnTime" style="color: var(--info);">-</div>
-            <div class="kpi-sub">Successfully Delivered</div>
           </div>
         </div>
 
         <div class="chart-grid">
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-chart-pie"></i> Late vs On-Time Distribution</div>
-            <div id="lateDistributionChart" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
+            <div id="lateDistributionChart" style="height: 380px;"></div>
           </div>
         </div>
       </div>
@@ -770,99 +313,20 @@
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby6lWwmSaETXhj6PMZliimwTX764dxoNzwp0c6X-zQp55IXlcZX9FApK-1buQXqWqvp/exec";
 
-let currentFilters = { supplier: null, category: null, orderType: null };
-let cachedData = null;
-let chartsRendered = { executive: false, operations: false, financial: false, categories: false, lateAnalysis: false };
-
 function showPage(pageId, element) {
-  document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active'));
+  document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
-  
-  document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
   element.classList.add('active');
-  
-  const titles = {
-    'executive': '📊 Executive Summary',
-    'operations': '⚙️ Operations Performance',
-    'financial': '💰 Financial Overview',
-    'categories': '📦 Category Analysis',
-    'lateAnalysis': '⚠️ Late Orders Analysis'
-  };
-  document.getElementById('pageTitle').innerHTML = titles[pageId];
-
-  if (cachedData && !chartsRendered[pageId]) {
-    setTimeout(() => {
-      renderPageCharts(pageId, cachedData);
-      chartsRendered[pageId] = true;
-    }, 100);
-  }
-
+  const titles = {'executive': '📊 Executive Summary', 'operations': '️ Operations', 'financial': '💰 Financial', 'categories': '📦 Categories', 'lateAnalysis': '⚠️ Late Analysis'};
+  document.getElementById('pageTitle').textContent = titles[pageId];
   setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
 }
 
 const fmt = new Intl.NumberFormat('en-US');
-const money = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
-const baseLayout = { 
-  paper_bgcolor: 'white', plot_bgcolor: 'white', margin: { l: 60, r: 30, t: 20, b: 50 }, 
-  font: { family: 'Inter, sans-serif', color: '#1e293b', size: 12 }, 
-  hoverlabel: { font: { size: 13 }, bgcolor: 'white' } 
-};
-const config = { responsive: true, displaylogo: false, modeBarButtonsToAdd: ['toImage'], modeBarButtonsToRemove: ['lasso2d', 'select2d'] };
-
-function applyFilters() {
-  fetchAndRender();
-}
-
-function resetDate() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('startDate').value = today;
-  document.getElementById('endDate').value = today;
-  clearAllFilters();
-}
-
-function filterBySupplier(supplier) {
-  currentFilters.supplier = currentFilters.supplier === supplier ? null : supplier;
-  updateFilterBar();
-  fetchAndRender();
-}
-
-function filterByCategory(category) {
-  currentFilters.category = currentFilters.category === category ? null : category;
-  updateFilterBar();
-  fetchAndRender();
-}
-
-function filterByOrderType(orderType) {
-  currentFilters.orderType = currentFilters.orderType === orderType ? null : orderType;
-  updateFilterBar();
-  fetchAndRender();
-}
-
-function clearAllFilters() {
-  currentFilters = { supplier: null, category: null, orderType: null };
-  updateFilterBar();
-  fetchAndRender();
-}
-
-function updateFilterBar() {
-  const filterBar = document.getElementById('filterBar');
-  const filterTags = document.getElementById('filterTags');
-  const activeFilters = Object.entries(currentFilters).filter(([_, v]) => v !== null);
-  
-  if (activeFilters.length === 0) {
-    filterBar.classList.remove('active');
-    return;
-  }
-  
-  filterBar.classList.add('active');
-  filterTags.innerHTML = activeFilters.map(([key, value]) => `
-    <span class="filter-tag">
-      <i class="fas fa-${key === 'supplier' ? 'star' : key === 'category' ? 'box' : 'list'}"></i>
-      ${key}: ${value}
-      <span class="remove-filter" onclick="filterBy${key.charAt(0).toUpperCase() + key.slice(1)}('${value}')">&times;</span>
-    </span>
-  `).join('');
-}
+const money = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
+const baseLayout = {paper_bgcolor: 'white', plot_bgcolor: 'white', margin: {l: 60, r: 30, t: 20, b: 50}, font: {family: 'Inter, sans-serif', color: '#1e293b', size: 12}};
+const config = {responsive: true, displaylogo: false, modeBarButtonsToAdd: ['toImage'], modeBarButtonsToRemove: ['lasso2d', 'select2d']};
 
 async function fetchAndRender() {
   const loader = document.getElementById('loader');
@@ -874,38 +338,26 @@ async function fetchAndRender() {
   try {
     const response = await fetch(API_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ 
-        startDate, endDate,
-        filterSupplier: currentFilters.supplier,
-        filterCategory: currentFilters.category,
-        filterOrderType: currentFilters.orderType
-      })
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({startDate, endDate})
     });
     const data = await response.json();
     if (data.error) throw new Error(data.error);
-    
-    cachedData = data;
-    chartsRendered = { executive: false, operations: false, financial: false, categories: false, lateAnalysis: false };
-    
-    renderKPIs(data);
-    
-    const activePage = document.querySelector('.page-section.active').id;
-    renderPageCharts(activePage, data);
-    chartsRendered[activePage] = true;
-    
+    renderDashboard(data);
   } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Error loading data: " + error.message);
+    console.error("Error:", error);
+    alert("Error: " + error.message);
   } finally {
     setTimeout(() => loader.classList.add('hidden'), 300);
   }
 }
 
-function renderKPIs(data) {
+function renderDashboard(data) {
   const kpis = data.kpis;
+  const charts = data.charts;
   const cats = data.categoryMetrics;
 
+  // Executive
   document.getElementById('execTotalOrders').textContent = fmt.format(kpis.totalOrders);
   document.getElementById('execSuccessRate').textContent = 'Success Rate: ' + kpis.successRate + '%';
   document.getElementById('execOnTimeRate').textContent = kpis.onTimeRate + '%';
@@ -913,181 +365,106 @@ function renderKPIs(data) {
   document.getElementById('execLateRate').textContent = 'Late Rate: ' + kpis.lateRate + '%';
   document.getElementById('execNmvRate').textContent = kpis.nmvRate + '%';
 
+  // Order Status Pie
+  Plotly.react('execOrderStatus', [{
+    type: 'pie', hole: 0.65,
+    labels: ['Sold', 'Undelivered', 'PD', 'Not Available'],
+    values: [kpis.sold, kpis.returned, kpis.pd, kpis.notAvailable],
+    marker: {colors: ['#06d6a0', '#ef476f', '#ffd166', '#4361ee'], line: {color: 'white', width: 3}},
+    textinfo: 'label+percent', textposition: 'inside',
+    textfont: {size: 13, color: 'white', weight: 'bold'}
+  }], {...baseLayout, showlegend: true, legend: {orientation: 'h', y: -0.1, x: 0.5}}, config);
+
+  // Scheduled Slots
+  const slots = charts.scheduledSlots;
+  Plotly.react('execScheduledSlots', [
+    {type: 'bar', x: slots.map(s => s.slot), y: slots.map(s => s.on_time), name: 'On-Time', marker: {color: '#06d6a0'}},
+    {type: 'bar', x: slots.map(s => s.slot), y: slots.map(s => s.late), name: 'Late', marker: {color: '#ef476f'}}
+  ], {...baseLayout, barmode: 'stack', legend: {orientation: 'h', y: -0.15}}, config);
+
+  // Supplier Table
+  const supTable = document.getElementById('execSupplierTable');
+  supTable.innerHTML = '';
+  charts.supplierReliability.slice(0, 10).forEach(sup => {
+    const badgeClass = sup.success_rate >= 90 ? 'success' : (sup.success_rate >= 80 ? 'warning' : 'danger');
+    const badgeText = sup.success_rate >= 90 ? 'Excellent' : (sup.success_rate >= 80 ? 'Good' : 'Needs Attention');
+    supTable.innerHTML += '<tr><td style="font-weight:600;">' + sup.name + '</td><td>' + fmt.format(sup.orders) + '</td><td style="color:var(--' + badgeClass + '); font-weight:700;">' + sup.success_rate + '%</td><td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td></tr>';
+  });
+
+  // Operations
   document.getElementById('opsCouriers').textContent = fmt.format(kpis.activeCouriers);
   document.getElementById('opsAvgLoad').textContent = kpis.avgOrdersPerCourier;
   document.getElementById('opsLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
-  document.getElementById('opsRushLate').textContent = data.charts.rushHour.rush.late_pct + '%';
+  document.getElementById('opsRushLate').textContent = charts.rushHour.rush.late_pct + '%';
 
+  // Express per Hour
+  const hourData = charts.expressPerHour;
+  Plotly.react('opsExpressHour', [
+    {type: 'bar', x: hourData.map(d => d.hour), y: hourData.map(d => d.total), name: 'Total', marker: {color: '#4361ee'}},
+    {type: 'bar', x: hourData.map(d => d.hour), y: hourData.map(d => d.late), name: 'Late', marker: {color: '#ef476f'}}
+  ], {...baseLayout, barmode: 'group', legend: {orientation: 'h', y: -0.15}}, config);
+
+  // Orders by Type
+  Plotly.react('opsOrderType', [{
+    type: 'bar', orientation: 'h',
+    y: charts.orderTypes.map(d => d.name),
+    x: charts.orderTypes.map(d => d.value),
+    marker: {color: ['#4361ee', '#118ab2', '#ef476f']},
+    text: charts.orderTypes.map(d => d.value), textposition: 'outside'
+  }], {...baseLayout, margin: {l: 120, r: 50, t: 10, b: 40}}, config);
+
+  // Financial
   document.getElementById('finGmv').textContent = '$' + money.format(kpis.totalGMV);
   document.getElementById('finNmv').textContent = '$' + money.format(kpis.totalNMV);
   document.getElementById('finMargin').textContent = '$' + money.format(kpis.totalMargin);
   document.getElementById('finAvgTicket').textContent = '$' + money.format(kpis.totalOrders > 0 ? kpis.totalGMV / kpis.totalOrders : 0);
-  document.getElementById('finDelFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
-  document.getElementById('finAddFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
-  document.getElementById('finSvcFees').textContent = '$' + money.format(kpis.totalServiceFees);
 
+  // Categories
   document.getElementById('catInventory').textContent = fmt.format(kpis.inventoryOrders);
   document.getElementById('catConsignment').textContent = fmt.format(kpis.consignmentOrders);
   document.getElementById('catSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
   document.getElementById('catSuccessRate').textContent = kpis.successRate + '%';
 
-  document.getElementById('lateTotal').textContent = fmt.format(kpis.lateOrders);
-  document.getElementById('latePercentage').textContent = 'Late Rate: ' + kpis.lateRate + '%';
-  document.getElementById('lateOnTime').textContent = fmt.format(kpis.onTimeOrders);
-
-  const supTable = document.getElementById('execSupplierTable');
-  supTable.innerHTML = '';
-  data.charts.supplierReliability.slice(0, 10).forEach(sup => {
-    const badgeClass = sup.success_rate >= 90 ? 'success' : (sup.success_rate >= 80 ? 'warning' : 'danger');
-    const badgeText = sup.success_rate >= 90 ? 'Excellent' : (sup.success_rate >= 80 ? 'Good' : 'Needs Attention');
-    const isActive = currentFilters.supplier === sup.name.toLowerCase();
-    supTable.innerHTML += '<tr class="clickable-row ' + (isActive ? 'active-filter' : '') + '" onclick="filterBySupplier(\'' + sup.name + '\')">' +
-      '<td style="font-weight:600; text-transform:capitalize;">' + sup.name + '</td>' +
-      '<td>' + fmt.format(sup.orders) + '</td>' +
-      '<td style="color:var(--' + badgeClass + '); font-weight:700;">' + sup.success_rate + '%</td>' +
-      '<td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td>' +
-      '</tr>';
-  });
-
   const catTable = document.getElementById('catPerformanceTable');
   catTable.innerHTML = '';
   const catData = [
-    { name: 'Lubricants', icon: 'fa-oil-can', color: 'var(--primary)', ...cats.lubricants },
-    { name: 'Spare Parts', icon: 'fa-cogs', color: 'var(--purple)', ...cats.spareParts },
-    { name: 'Mix', icon: 'fa-layer-group', color: 'var(--warning)', ...cats.mix }
+    {name: 'Lubricants', ...cats.lubricants, color: 'var(--primary)', icon: 'fa-oil-can'},
+    {name: 'Spare Parts', ...cats.spareParts, color: 'var(--purple)', icon: 'fa-cogs'},
+    {name: 'Mix', ...cats.mix, color: 'var(--warning)', icon: 'fa-layer-group'}
   ];
   catData.forEach(cat => {
-    const isActive = currentFilters.category === cat.name.toLowerCase();
-    catTable.innerHTML += '<tr class="clickable-row ' + (isActive ? 'active-filter' : '') + '" onclick="filterByCategory(\'' + cat.name + '\')">' +
-      '<td style="font-weight:700; color:' + cat.color + ';"><i class="fas ' + cat.icon + '" style="margin-right:8px;"></i>' + cat.name + '</td>' +
-      '<td>' + fmt.format(cat.total) + '</td>' +
-      '<td style="color:var(--danger); font-weight:600;">' + fmt.format(cat.late) + '</td>' +
-      '<td style="color:var(--warning); font-weight:700;">' + cat.delayRate + '</td>' +
-      '<td>' + cat.ofTotal + '</td>' +
-      '</tr>';
+    catTable.innerHTML += '<tr><td style="font-weight:700; color:' + cat.color + ';"><i class="fas ' + cat.icon + '" style="margin-right:8px;"></i>' + cat.name + '</td><td>' + fmt.format(cat.total) + '</td><td style="color:var(--danger);">' + fmt.format(cat.late) + '</td><td style="color:var(--warning); font-weight:700;">' + cat.delayRate + '</td><td>' + cat.ofTotal + '</td></tr>';
   });
-}
 
-function renderPageCharts(pageId, data) {
-  const charts = data.charts;
-  const cats = data.categoryMetrics;
+  // Category Chart
+  Plotly.react('catChart', [{
+    type: 'bar',
+    x: ['Lubricants', 'Spare Parts', 'Mix'],
+    y: [cats.lubricants.total, cats.spareParts.total, cats.mix.total],
+    marker: {color: ['#4361ee', '#7209b7', '#ffd166']}
+  }], {...baseLayout}, config);
 
-  if (pageId === 'executive') {
-    renderPieChart('execOrderStatus', charts.orderStatus, ['Sold', 'Undelivered', 'PD', 'Not Available'], ['#06d6a0', '#ef476f', '#ffd166', '#4361ee']);
-    renderScheduledSlotsChart('execScheduledSlots', charts.scheduledSlots);
-  } else if (pageId === 'operations') {
-    renderBarChart('opsExpressHour', charts.expressPerHour.map(d=>d.hour), charts.expressPerHour.map(d=>d.total), charts.expressPerHour.map(d=>d.late));
-    renderHorizontalBar('opsOrderType', charts.orderTypes.map(d=>d.name), charts.orderTypes.map(d=>d.value), ['#4361ee', '#118ab2', '#ef476f']);
-    
-    setTimeout(() => {
-      const plotDiv = document.getElementById('opsOrderType');
-      if (plotDiv) {
-        plotDiv.on('plotly_click', function(clickData) {
-          const clickedLabel = clickData.points[0].y;
-          filterByOrderType(clickedLabel.toLowerCase());
-        });
-      }
-    }, 500);
-  } else if (pageId === 'categories') {
-    renderTreemap('catTreemap', cats);
-    renderPieChart('catPieChart', [
-      {name: 'Inventory', value: data.kpis.inventoryOrders},
-      {name: 'Consignment', value: data.kpis.consignmentOrders},
-      {name: 'Other Suppliers', value: data.kpis.otherSuppliersOrders}
-    ], null, ['#4361ee', '#7209b7', '#118ab2']);
-  } else if (pageId === 'lateAnalysis') {
-    const totalScheduledLate = charts.lateReasonsTotals?.scheduled || 0;
-    const totalExpressLate = charts.lateReasonsTotals?.express || 0;
-    document.getElementById('lateScheduled').textContent = fmt.format(totalScheduledLate);
-    document.getElementById('lateExpress').textContent = fmt.format(totalExpressLate);
-    renderPieChart('lateDistributionChart', [
-      {name: 'On-Time', value: data.kpis.onTimeOrders},
-      {name: 'Late', value: data.kpis.lateOrders}
-    ], null, ['#06d6a0', '#ef476f']);
-  }
-}
+  // Inventory vs Consignment Pie
+  Plotly.react('catPieChart', [{
+    type: 'pie', hole: 0.65,
+    labels: ['Inventory', 'Consignment', 'Other Suppliers'],
+    values: [kpis.inventoryOrders, kpis.consignmentOrders, kpis.otherSuppliersOrders],
+    marker: {colors: ['#4361ee', '#7209b7', '#118ab2']}
+  }], {...baseLayout, showlegend: true, legend: {orientation: 'h', y: -0.1, x: 0.5}}, config);
 
-function renderPieChart(divId, data, customLabels, colors) {
-  const labels = customLabels || data.map(d => d.name);
-  const values = data.map(d => d.value);
-  Plotly.react(divId, [{
-    type: 'pie', hole: 0.65, labels: labels, values: values, marker: { colors: colors, line: { color: 'white', width: 3 } },
-    textinfo: 'label+percent', textposition: 'inside', textfont: { size: 13, color: 'white', weight: 'bold' },
-    hovertemplate: '<b>%{label}</b><br>Value: %{value}<br>Percentage: %{percent}<extra></extra>'
-  }], { ...baseLayout, showlegend: true, legend: { orientation: 'h', y: -0.1, x: 0.5, xanchor: 'center' }, margin: { t: 30, b: 50, l: 20, r: 20 } }, config);
-}
+  // Late Analysis
+  document.getElementById('lateTotal').textContent = fmt.format(kpis.lateOrders);
+  document.getElementById('latePercentage').textContent = 'Late Rate: ' + kpis.lateRate + '%';
+  document.getElementById('lateOnTime').textContent = fmt.format(kpis.onTimeOrders);
+  document.getElementById('lateScheduled').textContent = fmt.format(charts.lateReasonsTotals?.scheduled || 0);
+  document.getElementById('lateExpress').textContent = fmt.format(charts.lateReasonsTotals?.express || 0);
 
-function renderScheduledSlotsChart(divId, slots) {
-  const slotNames = slots.map(s => s.slot);
-  const onTimeData = slots.map(s => s.on_time);
-  const lateData = slots.map(s => s.late);
-  
-  Plotly.react(divId, [
-    { type: 'bar', x: slotNames, y: onTimeData, name: 'On-Time', marker: { color: '#06d6a0' } },
-    { type: 'bar', x: slotNames, y: lateData, name: 'Late', marker: { color: '#ef476f' } }
-  ], { 
-    ...baseLayout, 
-    barmode: 'stack', 
-    legend: { orientation: 'h', y: -0.15 },
-    yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' },
-    xaxis: { title: 'Time Slot', gridcolor: '#e2e8f0' }
-  }, config);
-}
-
-function renderBarChart(divId, xLabels, totalData, lateData) {
-  Plotly.react(divId, [
-    { type: 'bar', x: xLabels, y: totalData, name: 'Total Orders', marker: { color: '#4361ee' } },
-    { type: 'bar', x: xLabels, y: lateData, name: 'Late Orders', marker: { color: '#ef476f' } }
-  ], { 
-    ...baseLayout, 
-    barmode: 'group', 
-    legend: { orientation: 'h', y: -0.15 },
-    yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' },
-    xaxis: { gridcolor: '#e2e8f0' }
-  }, config);
-}
-
-function renderHorizontalBar(divId, yLabels, xData, colors) {
-  Plotly.react(divId, [{
-    type: 'bar', orientation: 'h', y: yLabels, x: xData, marker: { color: colors, line: { color: 'white', width: 2 } },
-    text: xData, textposition: 'outside', textfont: { size: 12, color: '#1e293b', weight: 'bold' },
-    hovertemplate: '<b>%{y}</b><br>Value: %{x}<br><i>Click to filter</i><extra></extra>'
-  }], { 
-    ...baseLayout, margin: { l: 120, r: 50, t: 10, b: 40 }, 
-    xaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' }, 
-    yaxis: { autorange: 'reversed', gridcolor: '#e2e8f0' } 
-  }, config);
-}
-
-function renderTreemap(divId, cats) {
-  const labels = ['Lubricants', 'Spare Parts', 'Mix'];
-  const values = [cats.lubricants.total, cats.spareParts.total, cats.mix.total];
-  const lateRates = [
-    parseFloat(cats.lubricants.delayRate) || 0,
-    parseFloat(cats.spareParts.delayRate) || 0,
-    parseFloat(cats.mix.delayRate) || 0
-  ];
-  
-  const colors = lateRates.map(rate => {
-    if (rate < 15) return '#06d6a0';
-    if (rate < 25) return '#ffd166';
-    return '#ef476f';
-  });
-  
-  Plotly.react(divId, [{
-    type: 'treemap',
-    labels: labels,
-    parents: ['', '', ''],
-    values: values,
-    marker: { colors: colors, line: { color: 'white', width: 2 } },
-    textinfo: 'label+value+percent',
-    textfont: { size: 14, color: 'white', weight: 'bold' },
-    hovertemplate: '<b>%{label}</b><br>Total: %{value}<br>Late Rate: %{customdata}%<extra></extra>',
-    customdata: lateRates
-  }], { 
-    ...baseLayout, 
-    margin: { t: 10, b: 10, l: 10, r: 10 }
-  }, config);
+  Plotly.react('lateDistributionChart', [{
+    type: 'pie', hole: 0.65,
+    labels: ['On-Time', 'Late'],
+    values: [kpis.onTimeOrders, kpis.lateOrders],
+    marker: {colors: ['#06d6a0', '#ef476f']}
+  }], {...baseLayout, showlegend: true, legend: {orientation: 'h', y: -0.1, x: 0.5}}, config);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
