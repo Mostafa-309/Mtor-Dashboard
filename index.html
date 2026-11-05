@@ -103,6 +103,7 @@
     transition: all 0.25s;
     border-radius: 10px;
     border-left: 3px solid transparent;
+    cursor: pointer;
   }
   .nav-links a:hover {
     background: var(--sidebar-hover);
@@ -123,7 +124,6 @@
     width: calc(100% - 280px);
   }
 
-  /* ✅ Global Header with Date Controls (Fixed) */
   .global-header {
     position: sticky;
     top: 0;
@@ -195,20 +195,9 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
   }
-  .btn-secondary {
-    background: var(--text-secondary);
-  }
-  .btn-secondary:hover {
-    background: var(--text-primary);
-  }
-  .btn-success {
-    background: var(--success);
-  }
-  .btn-success:hover {
-    background: var(--success-dark);
-  }
+  .btn-secondary { background: var(--text-secondary); }
+  .btn-secondary:hover { background: var(--text-primary); }
 
-  /* ✅ Filter Breadcrumb */
   .filter-bar {
     background: linear-gradient(135deg, rgba(67, 97, 238, 0.08), rgba(114, 9, 183, 0.08));
     padding: 14px 32px;
@@ -404,7 +393,6 @@
   tr:last-child td { border-bottom: none; }
   tr:hover { background: rgba(67, 97, 238, 0.02); }
   
-  /* ✅ Clickable table rows */
   .clickable-row { cursor: pointer; transition: all 0.2s; }
   .clickable-row:hover {
     background: rgba(67, 97, 238, 0.08) !important;
@@ -429,14 +417,19 @@
   .badge.warning { background: rgba(255, 209, 102, 0.15); color: var(--warning); }
   .badge.info { background: rgba(17, 138, 178, 0.15); color: var(--info); }
 
-  .reasons-table-wrapper {
-    max-height: 600px;
-    overflow-y: auto;
-    padding: 8px;
+  /* Loading placeholder for charts */
+  .chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 380px;
+    color: var(--text-secondary);
+    font-size: 14px;
   }
-  .reasons-table-wrapper::-webkit-scrollbar { width: 8px; }
-  .reasons-table-wrapper::-webkit-scrollbar-track { background: var(--bg-color); border-radius: 8px; }
-  .reasons-table-wrapper::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 8px; }
+  .chart-loading i {
+    margin-right: 8px;
+    animation: spin 1s linear infinite;
+  }
 
   @media (max-width: 1024px) {
     .sidebar { width: 76px; }
@@ -459,7 +452,6 @@
     <div style="margin-top: 15px; font-size: 14px; color: var(--primary); font-weight: 600;">Loading dashboard data...</div>
   </div>
 
-  <!-- Sidebar -->
   <nav class="sidebar">
     <div class="sidebar-header">
       <h2><i class="fas fa-truck-fast"></i> <span>Mtor Dashboard</span></h2>
@@ -473,10 +465,7 @@
     </ul>
   </nav>
 
-  <!-- Main Content -->
   <main class="main-content">
-    
-    <!-- ✅ Global Header (Fixed, appears on all pages) -->
     <div class="global-header">
       <h1 id="pageTitle"><span>📊</span> Executive Summary</h1>
       <div class="header-controls">
@@ -491,7 +480,6 @@
       </div>
     </div>
 
-    <!-- ✅ Filter Breadcrumb Bar -->
     <div id="filterBar" class="filter-bar">
       <div class="filter-bar-label"><i class="fas fa-filter"></i> Active Filters:</div>
       <div id="filterTags"></div>
@@ -538,12 +526,12 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-chart-pie"></i> Order Status Breakdown</div>
-            <div id="execOrderStatus" style="height: 380px;"></div>
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> Order Status Breakdown <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click to filter)</span></div>
+            <div id="execOrderStatus" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-tachometer-alt"></i> Delivery SLA Compliance</div>
-            <div id="execSlaCompliance" style="height: 380px;"></div>
+            <div class="chart-title"><i class="fas fa-clock"></i> Scheduled Slots Performance</div>
+            <div id="execScheduledSlots" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
 
@@ -599,12 +587,12 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-clock"></i> Express Orders per Hour (11 AM - 11 PM)</div>
-            <div id="opsExpressHour" style="height: 380px;"></div>
+            <div class="chart-title"><i class="fas fa-clock"></i> Express Orders per Hour <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click bar to filter)</span></div>
+            <div id="opsExpressHour" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-list"></i> Orders by Type <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click bar to filter)</span></div>
-            <div id="opsOrderType" style="height: 380px;"></div>
+            <div id="opsOrderType" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
       </div>
@@ -669,13 +657,6 @@
             <div class="kpi-value" id="finSvcFees" style="font-size: 24px; color: var(--success);">-</div>
           </div>
         </div>
-
-        <div class="chart-grid">
-          <div class="chart-card" style="grid-column: 1 / -1;">
-            <div class="chart-title"><i class="fas fa-chart-line"></i> Logistics Cost Trend (Filtered)</div>
-            <div id="finLogisticsCost" style="height: 380px;"></div>
-          </div>
-        </div>
       </div>
 
       <!-- PAGE 4: CATEGORIES -->
@@ -736,11 +717,11 @@
         <div class="chart-grid">
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-th-large"></i> Orders by Category (Treemap)</div>
-            <div id="catTreemap" style="height: 420px;"></div>
+            <div id="catTreemap" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
           <div class="chart-card">
             <div class="chart-title"><i class="fas fa-chart-pie"></i> Inventory vs Consignment</div>
-            <div id="catPieChart" style="height: 420px;"></div>
+            <div id="catPieChart" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
       </div>
@@ -784,27 +765,8 @@
 
         <div class="chart-grid">
           <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-chart-area"></i> Late Orders Trend (All Time)</div>
-            <div id="lateTrendChart" style="height: 380px;"></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-chart-pie"></i> Late vs On-Time Distribution</div>
-            <div id="lateDistributionChart" style="height: 380px;"></div>
-          </div>
-        </div>
-
-        <div class="chart-grid">
-          <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-list-alt"></i> Late Orders - Final Reason Breakdown</div>
-            <div id="lateReasonsContainer" class="reasons-table-wrapper">
-              <p style="text-align: center; color: var(--text-secondary); padding: 24px;">Loading...</p>
-            </div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-title"><i class="fas fa-tags"></i> Late Orders - Tag Reason Breakdown</div>
-            <div id="tagReasonsContainer" class="reasons-table-wrapper">
-              <p style="text-align: center; color: var(--text-secondary); padding: 24px;">Loading...</p>
-            </div>
+            <div class="chart-title"><i class="fas fa-chart-pie"></i> Late vs On-Time Distribution <span style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-left:auto;">(Click to filter)</span></div>
+            <div id="lateDistributionChart" class="chart-loading"><i class="fas fa-spinner"></i> Loading chart...</div>
           </div>
         </div>
       </div>
@@ -814,15 +776,10 @@
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycby6lWwmSaETXhj6PMZliimwTX764dxoNzwp0c6X-zQp55IXlcZX9FApK-1buQXqWqvp/exec";
 
-// ✅ Global Filter State
-let currentFilters = {
-  supplier: null,
-  category: null,
-  orderType: null,
-  courier: null
-};
+let currentFilters = { supplier: null, category: null, orderType: null };
+let cachedData = null;
+let chartsRendered = { executive: false, operations: false, financial: false, categories: false, lateAnalysis: false };
 
-// Tab Navigation
 function showPage(pageId, element) {
   document.querySelectorAll('.page-section').forEach(page => page.classList.remove('active'));
   document.getElementById(pageId).classList.add('active');
@@ -839,6 +796,14 @@ function showPage(pageId, element) {
   };
   document.getElementById('pageTitle').innerHTML = titles[pageId];
 
+  // ✅ Lazy Loading: Render charts only when page is shown
+  if (cachedData && !chartsRendered[pageId]) {
+    setTimeout(() => {
+      renderPageCharts(pageId, cachedData);
+      chartsRendered[pageId] = true;
+    }, 100);
+  }
+
   setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
 }
 
@@ -851,9 +816,8 @@ const baseLayout = {
 };
 const config = { responsive: true, displaylogo: false, modeBarButtonsToAdd: ['toImage'], modeBarButtonsToRemove: ['lasso2d', 'select2d'] };
 
-// ✅ Apply Filters (Date + Interactive)
-async function applyFilters() {
-  await fetchAndRender();
+function applyFilters() {
+  fetchAndRender();
 }
 
 function resetDate() {
@@ -863,7 +827,6 @@ function resetDate() {
   clearAllFilters();
 }
 
-// ✅ Interactive Filter Functions
 function filterBySupplier(supplier) {
   currentFilters.supplier = currentFilters.supplier === supplier ? null : supplier;
   updateFilterBar();
@@ -883,7 +846,7 @@ function filterByOrderType(orderType) {
 }
 
 function clearAllFilters() {
-  currentFilters = { supplier: null, category: null, orderType: null, courier: null };
+  currentFilters = { supplier: null, category: null, orderType: null };
   updateFilterBar();
   fetchAndRender();
 }
@@ -901,14 +864,13 @@ function updateFilterBar() {
   filterBar.classList.add('active');
   filterTags.innerHTML = activeFilters.map(([key, value]) => `
     <span class="filter-tag">
-      <i class="fas fa-${key === 'supplier' ? 'star' : key === 'category' ? 'box' : key === 'orderType' ? 'list' : 'user'}"></i>
+      <i class="fas fa-${key === 'supplier' ? 'star' : key === 'category' ? 'box' : 'list'}"></i>
       ${key}: ${value}
       <span class="remove-filter" onclick="filterBy${key.charAt(0).toUpperCase() + key.slice(1)}('${value}')">&times;</span>
     </span>
   `).join('');
 }
 
-// ✅ Fetch Data with Filters
 async function fetchAndRender() {
   const loader = document.getElementById('loader');
   loader.classList.remove('hidden');
@@ -924,28 +886,33 @@ async function fetchAndRender() {
         startDate, endDate,
         filterSupplier: currentFilters.supplier,
         filterCategory: currentFilters.category,
-        filterOrderType: currentFilters.orderType,
-        filterCourier: currentFilters.courier
+        filterOrderType: currentFilters.orderType
       })
     });
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     
-    renderDashboard(data);
+    cachedData = data;
+    chartsRendered = { executive: false, operations: false, financial: false, categories: false, lateAnalysis: false };
+    
+    renderKPIs(data);
+    
+    const activePage = document.querySelector('.page-section.active').id;
+    renderPageCharts(activePage, data);
+    chartsRendered[activePage] = true;
+    
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Error loading data: " + error.message);
   } finally {
-    setTimeout(() => loader.classList.add('hidden'), 500);
+    setTimeout(() => loader.classList.add('hidden'), 300);
   }
 }
 
-function renderDashboard(data) {
+function renderKPIs(data) {
   const kpis = data.kpis;
-  const charts = data.charts;
   const cats = data.categoryMetrics;
 
-  // PAGE 1: EXECUTIVE
   document.getElementById('execTotalOrders').textContent = fmt.format(kpis.totalOrders);
   document.getElementById('execSuccessRate').textContent = `Success Rate: ${kpis.successRate}%`;
   document.getElementById('execOnTimeRate').textContent = kpis.onTimeRate + '%';
@@ -953,13 +920,32 @@ function renderDashboard(data) {
   document.getElementById('execLateRate').textContent = `Late Rate: ${kpis.lateRate}%`;
   document.getElementById('execNmvRate').textContent = kpis.nmvRate + '%';
 
-  renderPieChart('execOrderStatus', charts.orderStatus, ['Sold', 'Undelivered', 'PD', 'Not Available'], ['#06d6a0', '#ef476f', '#ffd166', '#4361ee']);
-  renderPieChart('execSlaCompliance', charts.slaCompliance, null, ['#06d6a0', '#ffd166', '#ef476f']);
+  document.getElementById('opsCouriers').textContent = fmt.format(kpis.activeCouriers);
+  document.getElementById('opsAvgLoad').textContent = kpis.avgOrdersPerCourier;
+  document.getElementById('opsLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
+  document.getElementById('opsRushLate').textContent = data.charts.rushHour.rush.late_pct + '%';
 
-  // ✅ Clickable Supplier Table
+  document.getElementById('finGmv').textContent = '$' + money.format(kpis.totalGMV);
+  document.getElementById('finNmv').textContent = '$' + money.format(kpis.totalNMV);
+  document.getElementById('finMargin').textContent = '$' + money.format(kpis.totalMargin);
+  document.getElementById('finAvgTicket').textContent = '$' + money.format(kpis.totalOrders > 0 ? kpis.totalGMV / kpis.totalOrders : 0);
+  document.getElementById('finDelFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
+  document.getElementById('finAddFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
+  document.getElementById('finSvcFees').textContent = '$' + money.format(kpis.totalServiceFees);
+
+  document.getElementById('catInventory').textContent = fmt.format(kpis.inventoryOrders);
+  document.getElementById('catConsignment').textContent = fmt.format(kpis.consignmentOrders);
+  document.getElementById('catSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
+  document.getElementById('catSuccessRate').textContent = kpis.successRate + '%';
+
+  document.getElementById('lateTotal').textContent = fmt.format(kpis.lateOrders);
+  document.getElementById('latePercentage').textContent = `Late Rate: ${kpis.lateRate}%`;
+  document.getElementById('lateOnTime').textContent = fmt.format(kpis.onTimeOrders);
+
+  // Supplier Table
   const supTable = document.getElementById('execSupplierTable');
   supTable.innerHTML = '';
-  charts.supplierReliability.slice(0, 10).forEach(sup => {
+  data.charts.supplierReliability.slice(0, 10).forEach(sup => {
     const badgeClass = sup.success_rate >= 90 ? 'success' : (sup.success_rate >= 80 ? 'warning' : 'danger');
     const badgeText = sup.success_rate >= 90 ? 'Excellent' : (sup.success_rate >= 80 ? 'Good' : 'Needs Attention');
     const isActive = currentFilters.supplier === sup.name.toLowerCase();
@@ -972,35 +958,7 @@ function renderDashboard(data) {
       </tr>`;
   });
 
-  // PAGE 2: OPERATIONS
-  document.getElementById('opsCouriers').textContent = fmt.format(kpis.activeCouriers);
-  document.getElementById('opsAvgLoad').textContent = kpis.avgOrdersPerCourier;
-  document.getElementById('opsLogisticsCost').textContent = '$' + money.format(kpis.logisticsCost);
-  document.getElementById('opsRushLate').textContent = charts.rushHour.rush.late_pct + '%';
-
-  renderBarChart('opsExpressHour', charts.expressPerHour.map(d=>d.hour), charts.expressPerHour.map(d=>d.total), charts.expressPerHour.map(d=>d.late));
-  
-  // ✅ Clickable Order Type Chart
-  renderClickableHorizontalBar('opsOrderType', charts.orderTypes.map(d=>d.name), charts.orderTypes.map(d=>d.value), ['#4361ee', '#118ab2', '#ef476f'], 'orderType');
-
-  // PAGE 3: FINANCIAL
-  document.getElementById('finGmv').textContent = '$' + money.format(kpis.totalGMV);
-  document.getElementById('finNmv').textContent = '$' + money.format(kpis.totalNMV);
-  document.getElementById('finMargin').textContent = '$' + money.format(kpis.totalMargin);
-  document.getElementById('finAvgTicket').textContent = '$' + money.format(kpis.totalOrders > 0 ? kpis.totalGMV / kpis.totalOrders : 0);
-  document.getElementById('finDelFees').textContent = '$' + money.format(kpis.totalDeliveryFees);
-  document.getElementById('finAddFees').textContent = '$' + money.format(kpis.totalAdditionalFees);
-  document.getElementById('finSvcFees').textContent = '$' + money.format(kpis.totalServiceFees);
-
-  renderLineChart('finLogisticsCost', charts.logisticsCostTrend.map(d=>d.date), charts.logisticsCostTrend.map(d=>d.cost));
-
-  // PAGE 4: CATEGORIES
-  document.getElementById('catInventory').textContent = fmt.format(kpis.inventoryOrders);
-  document.getElementById('catConsignment').textContent = fmt.format(kpis.consignmentOrders);
-  document.getElementById('catSuppliers').textContent = fmt.format(kpis.otherSuppliersOrders);
-  document.getElementById('catSuccessRate').textContent = kpis.successRate + '%';
-
-  // ✅ Clickable Category Table
+  // Category Table
   const catTable = document.getElementById('catPerformanceTable');
   catTable.innerHTML = '';
   const catData = [
@@ -1019,33 +977,37 @@ function renderDashboard(data) {
         <td>${cat.ofTotal}</td>
       </tr>`;
   });
-
-  // ✅ Treemap Chart for Categories
-  renderTreemap('catTreemap', cats);
-  renderPieChart('catPieChart', [
-    {name: 'Inventory', value: kpis.inventoryOrders},
-    {name: 'Consignment', value: kpis.consignmentOrders},
-    {name: 'Other Suppliers', value: kpis.otherSuppliersOrders}
-  ], null, ['#4361ee', '#7209b7', '#118ab2']);
-
-  // PAGE 5: LATE ANALYSIS
-  document.getElementById('lateTotal').textContent = fmt.format(kpis.lateOrders);
-  document.getElementById('latePercentage').textContent = `Late Rate: ${kpis.lateRate}%`;
-  document.getElementById('lateOnTime').textContent = fmt.format(kpis.onTimeOrders);
-  document.getElementById('lateScheduled').textContent = fmt.format(charts.lateReasonsTotals?.scheduled || 0);
-  document.getElementById('lateExpress').textContent = fmt.format(charts.lateReasonsTotals?.express || 0);
-
-  renderLateTrendChart('lateTrendChart', charts.allTimeDailyLate);
-  renderPieChart('lateDistributionChart', [
-    {name: 'On-Time', value: kpis.onTimeOrders},
-    {name: 'Late', value: kpis.lateOrders}
-  ], null, ['#06d6a0', '#ef476f']);
-
-  renderLateReasonsTable(charts.lateReasons, charts.lateReasonsTotals, 'lateReasonsContainer', 'Final Reason');
-  renderLateReasonsTable(charts.tagReasons, charts.tagReasonsTotals, 'tagReasonsContainer', 'Tag Reason');
 }
 
-// ✅ Chart Functions
+function renderPageCharts(pageId, data) {
+  const charts = data.charts;
+  const cats = data.categoryMetrics;
+
+  if (pageId === 'executive') {
+    renderClickablePieChart('execOrderStatus', charts.orderStatus, ['Sold', 'Undelivered', 'PD', 'Not Available'], ['#06d6a0', '#ef476f', '#ffd166', '#4361ee'], 'orderStatus');
+    renderScheduledSlotsChart('execScheduledSlots', charts.scheduledSlots);
+  } else if (pageId === 'operations') {
+    renderClickableBarChart('opsExpressHour', charts.expressPerHour.map(d=>d.hour), charts.expressPerHour.map(d=>d.total), charts.expressPerHour.map(d=>d.late));
+    renderClickableHorizontalBar('opsOrderType', charts.orderTypes.map(d=>d.name), charts.orderTypes.map(d=>d.value), ['#4361ee', '#118ab2', '#ef476f'], 'orderType');
+  } else if (pageId === 'categories') {
+    renderTreemap('catTreemap', cats);
+    renderPieChart('catPieChart', [
+      {name: 'Inventory', value: data.kpis.inventoryOrders},
+      {name: 'Consignment', value: data.kpis.consignmentOrders},
+      {name: 'Other Suppliers', value: data.kpis.otherSuppliersOrders}
+    ], null, ['#4361ee', '#7209b7', '#118ab2']);
+  } else if (pageId === 'lateAnalysis') {
+    const totalScheduledLate = charts.lateReasonsTotals?.scheduled || 0;
+    const totalExpressLate = charts.lateReasonsTotals?.express || 0;
+    document.getElementById('lateScheduled').textContent = fmt.format(totalScheduledLate);
+    document.getElementById('lateExpress').textContent = fmt.format(totalExpressLate);
+    renderClickablePieChart('lateDistributionChart', [
+      {name: 'On-Time', value: data.kpis.onTimeOrders},
+      {name: 'Late', value: data.kpis.lateOrders}
+    ], null, ['#06d6a0', '#ef476f'], 'lateDistribution');
+  }
+}
+
 function renderPieChart(divId, data, customLabels, colors) {
   const labels = customLabels || data.map(d => d.name);
   const values = data.map(d => d.value);
@@ -1056,14 +1018,58 @@ function renderPieChart(divId, data, customLabels, colors) {
   }], { ...baseLayout, showlegend: true, legend: { orientation: 'h', y: -0.1, x: 0.5, xanchor: 'center' }, margin: { t: 30, b: 50, l: 20, r: 20 } }, config);
 }
 
-function renderBarChart(divId, xLabels, totalData, lateData) {
+function renderClickablePieChart(divId, data, customLabels, colors, filterType) {
+  renderPieChart(divId, data, customLabels, colors);
+  
+  const plotDiv = document.getElementById(divId);
+  plotDiv.on('plotly_click', function(clickData) {
+    const clickedLabel = clickData.points[0].label;
+    if (filterType === 'orderStatus') {
+      // Filter by status (Sold, Returned, etc.)
+      console.log('Filter by status:', clickedLabel);
+    } else if (filterType === 'lateDistribution') {
+      // Filter by late/on-time
+      console.log('Filter by distribution:', clickedLabel);
+    }
+  });
+}
+
+function renderScheduledSlotsChart(divId, slots) {
+  const slotNames = slots.map(s => s.slot);
+  const onTimeData = slots.map(s => s.on_time);
+  const lateData = slots.map(s => s.late);
+  
+  Plotly.react(divId, [
+    { type: 'bar', x: slotNames, y: onTimeData, name: 'On-Time', marker: { color: '#06d6a0' } },
+    { type: 'bar', x: slotNames, y: lateData, name: 'Late', marker: { color: '#ef476f' } }
+  ], { 
+    ...baseLayout, 
+    barmode: 'stack', 
+    legend: { orientation: 'h', y: -0.15 },
+    yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' },
+    xaxis: { title: 'Time Slot', gridcolor: '#e2e8f0' }
+  }, config);
+}
+
+function renderClickableBarChart(divId, xLabels, totalData, lateData) {
   Plotly.react(divId, [
     { type: 'bar', x: xLabels, y: totalData, name: 'Total Orders', marker: { color: '#4361ee' } },
     { type: 'bar', x: xLabels, y: lateData, name: 'Late Orders', marker: { color: '#ef476f' } }
-  ], { ...baseLayout, barmode: 'group', legend: { orientation: 'h', y: -0.15 }, yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' }, xaxis: { gridcolor: '#e2e8f0' } }, config);
+  ], { 
+    ...baseLayout, 
+    barmode: 'group', 
+    legend: { orientation: 'h', y: -0.15 },
+    yaxis: { title: 'Number of Orders', gridcolor: '#e2e8f0' },
+    xaxis: { gridcolor: '#e2e8f0' }
+  }, config);
+  
+  const plotDiv = document.getElementById(divId);
+  plotDiv.on('plotly_click', function(data) {
+    const clickedHour = data.points[0].x;
+    console.log('Filter by hour:', clickedHour);
+  });
 }
 
-// ✅ Clickable Horizontal Bar
 function renderClickableHorizontalBar(divId, yLabels, xData, colors, filterKey) {
   Plotly.react(divId, [{
     type: 'bar', orientation: 'h', y: yLabels, x: xData, marker: { color: colors, line: { color: 'white', width: 2 } },
@@ -1075,7 +1081,6 @@ function renderClickableHorizontalBar(divId, yLabels, xData, colors, filterKey) 
     yaxis: { autorange: 'reversed', gridcolor: '#e2e8f0' } 
   }, config);
   
-  // Add click handler
   const plotDiv = document.getElementById(divId);
   plotDiv.on('plotly_click', function(data) {
     const clickedLabel = data.points[0].y;
@@ -1083,7 +1088,6 @@ function renderClickableHorizontalBar(divId, yLabels, xData, colors, filterKey) 
   });
 }
 
-// ✅ Treemap Chart for Categories
 function renderTreemap(divId, cats) {
   const labels = ['Lubricants', 'Spare Parts', 'Mix'];
   const values = [cats.lubricants.total, cats.spareParts.total, cats.mix.total];
@@ -1093,7 +1097,6 @@ function renderTreemap(divId, cats) {
     parseFloat(cats.mix.delayRate) || 0
   ];
   
-  // Color based on late rate (green = good, red = bad)
   const colors = lateRates.map(rate => {
     if (rate < 15) return '#06d6a0';
     if (rate < 25) return '#ffd166';
@@ -1117,84 +1120,6 @@ function renderTreemap(divId, cats) {
   }, config);
 }
 
-function renderLineChart(divId, xData, yData) {
-  if (!xData || xData.length === 0) {
-    Plotly.react(divId, [{ type: 'scatter', x: [0], y: [0], mode: 'markers', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No data available', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
-    return;
-  }
-  
-  Plotly.react(divId, [{
-    type: 'scatter', mode: 'lines+markers', x: xData, y: yData, name: 'Logistics Cost',
-    line: { color: '#06d6a0', width: 3, shape: 'spline' },
-    marker: { size: 7, color: '#06d6a0', line: { color: 'white', width: 2 } },
-    hovertemplate: '<b>%{x}</b><br>Cost: $%{y:,.0f}<extra></extra>'
-  }], { ...baseLayout, xaxis: { tickangle: -45, gridcolor: '#e2e8f0', title: 'Date' }, yaxis: { tickprefix: '$', gridcolor: '#e2e8f0', title: 'Cost ($)' } }, config);
-}
-
-function renderLateTrendChart(divId, dailyData) {
-  if (!dailyData || dailyData.length === 0) {
-    Plotly.react(divId, [{ type: 'scatter', x: [0], y: [0], mode: 'markers', marker: { color: '#e2e8f0' }, hoverinfo: 'none' }], { ...baseLayout, xaxis: { visible: false }, yaxis: { visible: false }, margin: { t: 20, b: 20, l: 20, r: 20 }, annotations: [{ text: 'No late orders data available', showarrow: false, font: { size: 14, color: '#64748b' } }] }, config);
-    return;
-  }
-  
-  const dates = dailyData.map(d => d.date);
-  const scheduledLate = dailyData.map(d => d.scheduled);
-  const expressLate = dailyData.map(d => d.express);
-  
-  Plotly.react(divId, [
-    { type: 'scatter', mode: 'lines+markers', name: 'Scheduled Late', x: dates, y: scheduledLate, line: { color: '#4361ee', width: 3, shape: 'spline' }, marker: { size: 7, color: '#4361ee', symbol: 'circle', line: { color: 'white', width: 2 } }, hovertemplate: '<b>%{x}</b><br>Scheduled Late: %{y}<extra></extra>' },
-    { type: 'scatter', mode: 'lines+markers', name: 'Express Late', x: dates, y: expressLate, line: { color: '#ef476f', width: 3, shape: 'spline' }, marker: { size: 7, color: '#ef476f', symbol: 'square', line: { color: 'white', width: 2 } }, hovertemplate: '<b>%{x}</b><br>Express Late: %{y}<extra></extra>' }
-  ], { ...baseLayout, xaxis: { tickangle: -45, gridcolor: '#e2e8f0', title: 'Date', tickformat: '%d/%m' }, yaxis: { title: 'Late Orders', gridcolor: '#e2e8f0' }, legend: { orientation: 'h', y: -0.15 }, margin: { t: 20, b: 60, l: 60, r: 30 }, hovermode: 'x unified' }, config);
-}
-
-function renderLateReasonsTable(reasons, totals, containerId, reasonType) {
-  const container = document.getElementById(containerId);
-  if (!container || !reasons || reasons.length === 0) {
-    container.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 24px;">No data available for this period</p>';
-    return;
-  }
-  
-  let html = `<table style="width:100%; border-collapse: collapse; font-size: 13px;">
-    <thead><tr style="background: var(--bg-color);">
-      <th style="padding: 14px 18px; text-align: left; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">${reasonType}</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">Scheduled</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">%</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">Express</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">%</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">Total</th>
-      <th style="padding: 14px 18px; text-align: center; font-weight: 600; color: var(--text-secondary); border-bottom: 2px solid var(--border-color);">%</th>
-    </tr></thead><tbody>`;
-  
-  reasons.forEach((r) => {
-    const schedPct = totals.scheduled > 0 ? ((r.scheduled / totals.scheduled) * 100).toFixed(1) : '0.0';
-    const exprPct = totals.express > 0 ? ((r.express / totals.express) * 100).toFixed(1) : '0.0';
-    const totalPct = totals.total > 0 ? ((r.total / totals.total) * 100).toFixed(1) : '0.0';
-    const reasonText = reasonType === 'Tag Reason' ? r.tag : r.reason;
-    
-    html += `<tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;">
-      <td style="padding: 12px 18px; font-weight: 600; color: var(--text-primary);">${reasonText}</td>
-      <td style="padding: 12px 18px; text-align: center; color: var(--primary); font-weight: 600;">${r.scheduled}</td>
-      <td style="padding: 12px 18px; text-align: center; color: var(--text-secondary);">${schedPct}%</td>
-      <td style="padding: 12px 18px; text-align: center; color: var(--danger); font-weight: 600;">${r.express}</td>
-      <td style="padding: 12px 18px; text-align: center; color: var(--text-secondary);">${exprPct}%</td>
-      <td style="padding: 12px 18px; text-align: center; font-weight: 700; color: var(--text-primary);">${r.total}</td>
-      <td style="padding: 12px 18px; text-align: center; color: var(--text-secondary);">${totalPct}%</td>
-    </tr>`;
-  });
-  
-  html += `<tr style="background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(239, 71, 111, 0.05)); font-weight: 700;">
-    <td style="padding: 14px 18px; color: var(--text-primary);">Total</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--primary);">${totals.scheduled}</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--text-secondary);">100%</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--danger);">${totals.express}</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--text-secondary);">100%</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--text-primary);">${totals.total}</td>
-    <td style="padding: 14px 18px; text-align: center; color: var(--text-secondary);">100%</td>
-  </tr></tbody></table>`;
-  container.innerHTML = html;
-}
-
-// Initialize
 window.addEventListener('DOMContentLoaded', () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('startDate').value = today;
